@@ -1,0 +1,6 @@
+PC-LiquidGAN Evaluation Metrics
+==================================================
+Dataset: synthetic
+
+   Epoch       SSIM    PSNR (dB)       RMSE
+--------------------------------------------------

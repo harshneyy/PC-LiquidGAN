@@ -1,0 +1,54 @@
+# ── Large data files (do NOT push to GitHub) ─────────────────────────
+data/kaist_raw/          # 18.5 GB ZIP — too large
+data/flir_raw/           # 15 GB ZIP
+data/tufts_raw/
+
+# Keep extracted image pairs small — comment these out if you want to push data
+data/kaist/
+data/cbsr/
+data/neonatal/
+data/flir/
+
+# Keep synthetic (small, ~100 MB) — remove this line to push synthetic data too
+data/synthetic/
+
+# ── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual environments ──────────────────────────────────────────────
+venv/
+env/
+liquidgan_env/
+.venv/
+
+# ── Checkpoints (large model files) ──────────────────────────────────
+# Comment out if you want to push checkpoints to GitHub
+checkpoints/
+
+# ── TensorBoard logs ──────────────────────────────────────────────────
+logs/
+
+# ── OS & Editor ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# ── Kaggle credentials (NEVER push this!) ────────────────────────────
+kaggle.json
+*.json
+
+# ── Temp files ────────────────────────────────────────────────────────
+*.tar
+*.zip
+*.tmp
+list_kaist.py
