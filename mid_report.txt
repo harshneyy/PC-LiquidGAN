@@ -1,0 +1,721 @@
+Physics-Informed LiquidGAN for
+Zero-Shot Cross-Domain Thermal Image
+Synthesis
+A report submitted in partial fulfilment of the requirements
+for the award of the degree of
+B.Tech Computer Science and Engineering
+by
+Aman Kumar (Roll No: 122CS0019)
+Prateek Verma (Roll No: 122CS0026)
+Harshit Verma (Roll No: 122CS0023)
+
+Under the Guidance of
+Dr. N. Srinivas Naik
+Associate Professor
+Dept. of CSE, IIITDM Kurnool
+
+DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING
+INDIAN INSTITUTE OF INFORMATION TECHNOLOGY DESIGN
+AND MANUFACTURING KURNOOL
+
+February 2026
+
+1
+
+Introduction
+
+Thermal imaging has emerged as a critical sensing modality across a wide range of
+applications, including medical diagnostics, surveillance, environmental monitoring, and
+precision agriculture.
+
+Unlike conventional RGB imaging, thermal imaging captures
+
+infrared radiation emitted by objects, enabling temperature-based analysis under varying
+lighting and environmental conditions.
+variations
+
+makes
+
+thermal
+
+imaging
+
+The ability to detect subtle temperature
+
+particularly
+
+valuable
+
+in
+
+safety-critical
+
+and
+
+low-visibility scenarios. However, the advancement of deep learning methods for thermal
+image analysis is significantly limited by the scarcity of large-scale annotated datasets.
+Generative Adversarial Networks (GANs) have shown promising results in synthetic
+image generation and data augmentation. By learning the underlying data distribution,
+GANs can generate realistic samples to alleviate data scarcity.
+
+Nevertheless,
+
+conventional GAN architectures treat thermal images as generic grayscale data and fail
+to incorporate the physical principles governing temperature distribution.
+
+In reality,
+
+thermal images inherently obey heat diffusion physics, where temperature varies
+smoothly across space and follows continuity constraints derived from the heat equation.
+Ignoring these physical properties may result in unrealistic temperature discontinuities,
+artificial hot spots, and reduced cross-domain robustness.
+To address this limitation, this work proposes a Physics-Constrained LiquidGAN (PCLiquidGAN), an extension of LiquidGAN that integrates a physics-aware loss inspired by
+the steady-state heat diffusion equation. The proposed loss penalizes non-physical thermal
+gradients during adversarial training, encouraging the generator to produce thermally
+plausible and physically consistent images.
+
+1
+
+2
+
+Literature Review
+
+2.1
+
+Core Papers Studied
+
+2.1.1
+
+LiquidGAN for Thermal Image Synthesis
+
+Sarath and Nair [1] proposed LiquidGAN, a novel GAN architecture integrating Neural
+Ordinary Differential Equations (Neural ODEs) in the generator and Liquid Neural
+Networks (LNNs) in the discriminator for high-fidelity thermal image synthesis under
+data scarcity.
+
+The generator employs an encoder–ODE–decoder framework with
+
+RK4-based latent evolution, while the LNN discriminator refines feature representations
+dynamically over time.
+
+The model demonstrates improved stability and superior
+
+performance over DCGAN and WGAN-GP on multiple thermal datasets.
+Limitation: The framework is entirely data-driven and does not explicitly enforce
+physical constraints such as heat diffusion continuity within the training objective.
+
+2.1.2
+
+Liquid Neural Networks
+
+Liquid Neural Networks model continuous-time neural dynamics using differential
+equations [2, 3].
+
+Their adaptive time-dependent behavior improves robustness under
+
+distributional shifts and dynamic environments.
+Limitation: Their integration in generative modeling remains limited to architectural
+improvements without domain-specific physical priors.
+
+2.1.3
+
+Neural ODEs and Physics-Informed Learning
+
+Neural ODEs [4] treat transformations as continuous dynamical systems, enabling smooth
+latent evolution in generative models. Physics-Informed Neural Networks (PINNs) [5]
+embed governing PDEs into neural training through residual minimization.
+
+2
+
+Literature Review
+
+3
+
+Limitation: While Neural ODEs enhance smooth feature evolution and PINNs enforce
+physical laws in regression tasks, their combined integration within adversarial thermal
+image generation remains underexplored.
+
+2.2
+
+Related Work
+
+GAN-based thermal image synthesis and augmentation methods [6, 7] improve dataset
+diversity but treat thermal images as generic grayscale data.
+
+Domain adaptation
+
+approaches [8] address cross-dataset generalization but require fine-tuning. Zero-shot
+cross-domain evaluation in thermal generative modeling remains limited.
+
+2.3
+
+Research Gaps
+
+G1. Lack of Continuous-Time Modeling: Traditional GAN architectures rely on
+discrete layer transformations, which are insufficient for modeling continuous physical
+phenomena such as heat diffusion. Neural ODEs [4] provide a continuous-time formulation
+but have not been extensively explored in thermal image synthesis.
+• Problem: Discrete layer transformations vs. continuous thermal phenomena
+• Impact: Unrealistic temperature discontinuities
+• Solution: Neural ODE-based generator [1]
+
+G2.
+
+Absence of Physics-Informed Constraints: Existing GAN-based thermal
+
+synthesis methods [6, 7] do not incorporate thermodynamic priors. Physics-Informed
+Neural Networks (PINNs) [5] demonstrate that embedding governing equations improves
+physical consistency.
+• Problem: No thermodynamic principles in existing methods
+• Impact: Violation of heat diffusion physics
+• Solution: Heat equation-inspired loss function [5]
+
+Literature Review
+
+4
+
+G3. Static Feature Extraction: Conventional CNN-based discriminators use fixed
+convolutional filters, limiting adaptability. Liquid Time-Constant Networks [2] and Neural
+Circuit Policies [3] introduce dynamic state evolution.
+• Problem: Fixed convolutional filters
+• Impact: Poor adaptation to dynamic thermal patterns
+• Solution: Liquid Neural Network discriminator [1]
+
+G4.
+
+Limited Cross-Domain Generalization: Most thermal synthesis models are
+
+evaluated on single datasets [6].
+
+Domain adaptation techniques [8] highlight the
+
+importance of cross-dataset evaluation.
+• Problem: Single-dataset training and testing
+• Impact: Poor performance under domain shift
+• Solution: Zero-shot cross-domain evaluation [8]
+
+G5. Insufficient Thermal Fidelity Metrics: Generic image quality metrics such as
+PSNR and SSIM do not capture thermodynamic plausibility [1]. There is a need for
+domain-aware evaluation frameworks.
+• Problem: Generic image quality metrics
+• Impact: Thermally implausible images score well
+• Solution: Domain-specific evaluation framework [1]
+
+2.3.1
+
+Detailed Dataset Documentation
+
+The proposed model is evaluated across five diverse thermal imaging datasets to ensure
+cross-domain robustness [1, 8].
+
+Literature Review
+
+5
+
+Dataset
+KAIST Multispectral
+CBSR NIR Face
+Neonatal Thermal
+Sapota Bruise
+Chilli Disease
+
+Images
+9,500
+3,940
+11,000
+5,030
+3,000
+
+Key Details Added
+Sensor specs, capture conditions [1]
+Wavelength range, pose variations [7]
+Ethical considerations, syndrome types [1]
+Environmental controls, temporal aspects [1]
+Growth stages, disease signatures [1]
+
+Table 2.1: Summary of Thermal Imaging Datasets
+
+2.3.2
+
+Physics-Constrained LiquidGAN Architecture
+High-Level Architecture
+
+Random
+
+Real
+
+Noise
+
+Thermal
+
+z
+
+Image
+
+GENERATOR
+
+DISCRIMINATOR
+
+Neural ODE
+
+Liquid Neural
+
+Encoder-Decoder
+
+Network
+
+Generated
+
+Probability
+
+Thermal
+
+Real/Fake
+
+Image
+
+[0, 1]
+Adversarial
+
+Backprop
+
+Loss
+
+Reconstruction
+
+Physics
+
+Loss
+
+Loss
+
+Total Loss
+LG = Ladv +
+Lrecon + Lphys
+Generator Innovation:
+
+Discriminator Innovation:
+
+• Neural ODE for continuous-time transformation
+
+• Liquid Neural dynamics
+
+• Smooth latent evolution
+
+• Time-dependent adaptation
+
+• Physically plausible reconstruction
+
+• Robust thermal discrimination
+
+Physics-Informed Loss enforces ∇2 T
+
+≈
+
+0 for thermodynamic consistency
+
+Figure 2.1: Architecture of the Physics-Constrained LiquidGAN framework.
+
+Literature Review
+
+2.4
+
+6
+
+Proposed Problem Statement
+
+Thermal image synthesis plays a crucial role in applications such as surveillance,
+healthcare diagnostics, and precision agriculture, where collecting large-scale annotated
+datasets is often challenging [1]. While LiquidGAN introduces continuous-time neural
+dynamics for improved representation learning [1, 4], it primarily relies on data-driven
+adversarial optimization without explicitly incorporating underlying thermodynamic
+principles.
+Thermal images inherently obey heat diffusion behavior governed by spatial continuity
+and energy conservation laws.
+
+However, existing GAN-based thermal synthesis
+
+frameworks [6, 7], including LiquidGAN [1], treat thermal data as conventional grayscale
+images and do not enforce physics-consistent constraints during training. This can result
+in physically implausible temperature gradients, unrealistic heat discontinuities, and
+limited cross-domain generalization under distribution shifts.
+Physics-Informed Neural Networks (PINNs) [5] demonstrate that embedding governing
+partial differential equations into deep learning frameworks improves physical consistency
+and generalization. However, such physics-aware modeling has not been systematically
+integrated into adversarial thermal image synthesis.
+Furthermore, current approaches lack systematic evaluation of zero-shot transfer capability
+across heterogeneous thermal domains [8], restricting their applicability in real-world lowdata scenarios.
+Therefore, there is a need for a physics-informed generative framework that integrates
+thermodynamically consistent constraints into adversarial training while enabling robust
+zero-shot cross-domain generalization for thermally plausible image synthesis under data
+scarcity.
+
+2.5
+
+Objectives
+
+The primary objective of this work is to enhance the LiquidGAN framework [1] by
+incorporating
+
+physics-informed
+
+regularization
+
+maintaining continuous-time latent dynamics [4].
+The specific objectives are:
+
+within
+
+adversarial
+
+training
+
+while
+
+Literature Review
+
+7
+
+• To integrate a physics-aware thermal smoothness constraint inspired by heat diffusion
+principles into the generator loss formulation, motivated by Physics-Informed Neural
+Networks (PINNs) [5].
+• To preserve continuous latent evolution using Neural ODE-based transformations [4]
+for smooth temperature transitions in thermal image synthesis.
+• To retain adaptive LNN-based discrimination [2, 3] for refined feature evolution and
+improved adversarial stability.
+• To evaluate zero-shot cross-domain robustness of the enhanced framework without
+additional fine-tuning, inspired by domain generalization studies [8].
+• To improve physical plausibility, training stability, and cross-domain generalization
+under limited annotated thermal data conditions [1].
+
+3
+
+Proposed Methodology
+
+3.1
+
+Overview
+
+Building upon LiquidGAN [1],
+
+we propose a Physics-Constrained LiquidGAN
+
+(PC-LiquidGAN) that integrates thermodynamic principles directly into adversarial
+training.
+Unlike the baseline model, which treats thermal images as grayscale intensity distributions,
+the proposed framework enforces consistency with the heat diffusion equation during image
+synthesis.
+The generator is modeled using Neural Ordinary Differential Equations (Neural ODEs) [4],
+while the discriminator is implemented as a Liquid Neural Network (LNN) [2]. Physicsaware constraints are incorporated via differentiable residual losses derived from diffusion
+dynamics.
+
+3.2
+
+Baseline LiquidGAN Formulation
+
+Let T denote a real thermal image and T̂ = G(z) the generated image from latent code z.
+The baseline generator objective is:
+
+Lbase
+= Ladv + λLrecon
+G
+
+(3.1)
+
+Ladv = −E[log D(G(z))]
+
+(3.2)
+
+Adversarial loss:
+
+Reconstruction loss:
+
+8
+
+Proposed Methodology
+
+9
+
+Lrecon = ∥T̂ − T ∥1
+
+(3.3)
+
+While this objective improves perceptual fidelity, it does not guarantee thermodynamic
+consistency.
+
+3.3
+
+Physics-Constrained Thermal Modeling
+
+3.3.1
+
+Heat Diffusion Equation
+
+Thermal image evolution follows the heat diffusion equation:
+
+∂T (x, t)
+= α∇2 T (x, t)
+∂t
+
+(3.4)
+
+where:
+• T (x, t) is the temperature field,
+• α is thermal diffusivity,
+• ∇2 is the spatial Laplacian operator.
+
+3.3.2
+
+Physics Residual Formulation
+
+The governing equation can be rewritten as a residual:
+
+R(x, t) =
+
+∂T
+− α∇2 T
+∂t
+
+(3.5)
+
+For physically valid thermal synthesis:
+
+R(x, t) = 0
+
+(3.6)
+
+Since exact equality cannot be enforced during GAN training, the residual is minimized
+in a least-squares sense.
+
+Proposed Methodology
+
+3.3.3
+
+10
+
+Discrete Approximation
+
+The temporal derivative is approximated using central difference:
+∂T
+Tt+∆t − Tt−∆t
+≈
+∂t
+2∆t
+
+(3.7)
+
+The spatial Laplacian is computed as:
+
+∇2 Ti,j = Ti+1,j + Ti−1,j + Ti,j+1 + Ti,j−1 − 4Ti,j
+
+3.3.4
+
+(3.8)
+
+Flux Consistency Loss
+
+The physics-aware flux loss is defined as:
+
+1 X
+Lf lux =
+N x
+
+
+
+∂T
+− α∇2 T
+∂t
+
+2
+(3.9)
+
+This loss penalizes violations of the heat diffusion equation and enforces thermodynamic
+consistency.
+
+3.3.5
+
+Energy Conservation Loss
+
+Total thermal energy is defined as:
+
+E(t) =
+
+X
+
+Ti,j (t)
+
+(3.10)
+
+i,j
+
+Energy regularization term:
+
+Lenergy = (E(t + ∆t) − E(t))2
+This constraint prevents artificial amplification or suppression of total heat energy.
+
+(3.11)
+
+Proposed Methodology
+
+3.4
+
+11
+
+Final Generator Objective
+
+The complete Physics-Constrained objective becomes:
+
+LPGC = Ladv + λLrecon + µ1 Lf lux + µ2 Lenergy
+
+(3.12)
+
+The parameters µ1 and µ2 control the strength of thermodynamic regularization.
+
+3.5
+
+Zero-Shot Cross-Domain Evaluation
+
+To evaluate generalization, the model is trained on a source thermal dataset and tested
+on unseen domains without fine-tuning.
+Performance is measured using:
+• Fréchet Inception Distance (FID)
+• Structural Similarity Index (SSIM)
+• Physics residual norm ∥R∥2
+
+Zero-shot evaluation verifies whether enforcing diffusion constraints improves robustness
+under domain shift.
+
+4
+
+Results
+
+4.1
+
+Experimental Setup
+
+The model was evaluated on multiple thermal imaging datasets including:
+• KAIST Multispectral
+• CBSR NIR Face
+• Neonatal Thermal
+• Sapota Bruise
+• Chilli Disease
+Training was performed using Adam optimizer with adversarial, reconstruction, flux
+consistency, and energy regularization losses.
+
+4.2
+
+Evaluation Metrics
+
+The following metrics were used:
+• Fréchet Inception Distance (FID)
+• Structural Similarity Index (SSIM)
+• Peak Signal-to-Noise Ratio (PSNR)
+• Physics Residual Norm (∥R∥2 )
+
+12
+
+Proposed Methodology
+
+4.3
+
+13
+
+Quantitative Results
+
+Physics-Constrained LiquidGAN shows:
+• Reduced FID compared to baseline LiquidGAN
+• Improved SSIM under cross-domain testing
+• Significant reduction in physics residual norm
+• Stable energy evolution across latent time steps
+
+4.4
+
+Zero-Shot Cross-Domain Evaluation
+
+The proposed model generalizes better under unseen dataset shifts, demonstrating
+improved robustness compared to DCGAN and WGAN-GP.
+
+4.5
+
+Ablation Study
+
+Removing Lf lux leads to unrealistic thermal gradients.
+Removing Lenergy causes artificial energy amplification.
+Both constraints are necessary for thermodynamic consistency.
+
+5
+
+Conclusion
+
+In this work, we proposed Physics-Constrained LiquidGAN (PC-LiquidGAN) for zero-shot
+cross-domain thermal image synthesis.
+Unlike conventional GAN-based methods that treat thermal images as grayscale intensity
+maps, our approach integrates thermodynamic constraints derived from the heat diffusion
+equation.
+Key contributions include:
+• Neural ODE-based generator for continuous latent evolution
+• Liquid Neural Network discriminator for adaptive refinement
+• Flux consistency loss enforcing heat diffusion
+• Energy conservation regularization
+• Zero-shot cross-domain validation strategy
+
+Experimental results demonstrate improved thermodynamic consistency, reduced physics
+residual error, and enhanced robustness under domain shift.
+Future work includes:
+• Learning adaptive thermal diffusivity parameter α
+• Extending to 3D spatio-temporal thermal modeling
+• Real-time deployment for surveillance and medical systems
+
+14
+
+6
+
+Future Work
+
+Although the proposed Physics-Constrained LiquidGAN improves thermal consistency and
+cross-domain robustness, several directions remain for future research.
+• Learnable Diffusivity: Instead of using a fixed thermal diffusivity parameter α,
+future work can explore learning this parameter directly from data to better adapt
+to different thermal domains and sensor characteristics.
+• Spatio-Temporal Extension: The current formulation models pseudo-temporal
+evolution within the Neural ODE latent space. Extending the framework to real
+thermal video sequences would allow explicit modeling of dynamic heat propagation.
+• Adaptive Loss Balancing:
+
+Automated strategies for adjusting the physics
+
+regularization weights (µ1 , µ2 ) could improve training stability and generalization
+performance.
+• Multi-Physics Modeling: Incorporating additional physical processes such as
+convection or radiative transfer may enhance realism in complex real-world thermal
+environments.
+• Real-World Deployment: Evaluating the framework under extreme domain shifts
+and diverse sensor settings would further validate its practical applicability.
+
+15
+
+Bibliography
+[1] S. Sarath and J. J. Nair, “Liquidgan: Integrating liquid neural networks and neural
+odes for high-fidelity thermal image synthesis under data scarcity,” IEEE Access,
+vol. 13, pp. 169 758–169 768, 2025.
+[2] R. Hasani, M. Lechner, A. Amini, D. Rus, and R. Grosu, “Liquid time-constant
+networks,” in AAAI Conference on Artificial Intelligence, 2021.
+[3] M. Lechner, R. Hasani, A. Amini, T. A. Henzinger, D. Rus, and R. Grosu, “Neural
+circuit policies enabling auditable autonomy,” Nature Machine Intelligence, vol. 2,
+no. 10, pp. 642–652, 2020.
+[4] R. T. Q. Chen, Y. Rubanova, J. Bettencourt, and D. Duvenaud, “Neural ordinary
+differential equations,” in Advances in Neural Information Processing Systems
+(NeurIPS), 2018.
+[5] M. Raissi, P. Perdikaris, and G. E. Karniadakis, “Physics-informed neural networks,”
+Journal of Computational Physics, vol. 378, pp. 686–707, 2019.
+[6] H. Zhang, L. Wu, and Y. Chen, “Infrared image generation using conditional gans,”
+IEEE Access, vol. 8, pp. 121 492–121 503, 2020.
+[7] Y. Wang, X. Zhao, and Q. Li, “Thermal-to-visible image translation via adversarial
+learning,” in IEEE International Conference on Image Processing (ICIP), 2021.
+[8] K. He, X. Zhang, and S. Ren, “Deep domain adaptation for cross-dataset generalization
+in image synthesis,” IEEE Transactions on Image Processing, vol. 31, pp. 3158–3172,
+2022.
+
+16
+
+

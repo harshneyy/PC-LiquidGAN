@@ -36,7 +36,7 @@ def get_args():
     p.add_argument('--lr_d',       type=float, default=None)
     p.add_argument('--img_size',   type=int,   default=None)
     p.add_argument('--dataset',    type=str,   default='synthetic',
-                   choices=['kaist', 'cbsr', 'neonatal', 'synthetic'])
+                   choices=['kaist', 'cbsr', 'neonatal', 'medical', 'agri', 'chilli', 'synthetic'])
     p.add_argument('--resume',     type=str,   default=None,
                    help='Path to checkpoint to resume from')
     p.add_argument('--test',       action='store_true',

@@ -32,6 +32,17 @@ liquidgan_env/
 # ── Checkpoints (large model files) ──────────────────────────────────
 # Comment out if you want to push checkpoints to GitHub
 checkpoints/
+checkpoints_ablation/
+checkpoints_baseline/
+checkpoints_physics/
+checkpoints_spectral/
+
+# ── Result images (large PNG files) ───────────────────────────────────
+results_ablation/
+results_baseline/
+results_physics/
+results_spectral/
+
 
 # ── TensorBoard logs ──────────────────────────────────────────────────
 logs/
@@ -52,3 +63,4 @@ kaggle.json
 *.zip
 *.tmp
 list_kaist.py
+data/

@@ -1,0 +1,539 @@
+Physics-Informed LiquidGAN for Zero-Shot
+Cross-Domain Thermal Image Synthesis
+Aman Kumar (122CS0019)
+Prateek Verma (122CS0026)
+Harshit Verma (122CS0023)
+Dept. of CSE
+IIITDM Kurnool
+Supervised: Dr. N. Srinivas Naik
+February 2026
+
+1 / 27
+
+Introduction – Problem Context
+
+• Thermal imaging used in healthcare, surveillance, agriculture.
+• Deep learning requires large annotated datasets.
+• Thermal datasets are limited and expensive to collect.
+• Data scarcity reduces model generalization.
+Need: Physically consistent data augmentation.
+
+2 / 27
+
+Introduction – Key Challenge
+
+• GANs used for data augmentation [1].
+• Conventional GANs treat thermal images as grayscale.
+• Ignore heat diffusion physics:
+∇2 T = 0
+Problem: Unrealistic thermal gradients and poor cross-domain
+robustness.
+
+3 / 27
+
+Literature Review (1/5): Generative Adversarial Networks
+
+Paper: Goodfellow et al., “Generative Adversarial Networks” [1]
+Methodology:
+• Introduced Generator–Discriminator adversarial framework.
+• Learns data distribution via minimax optimization.
+• Widely adopted for image synthesis and augmentation.
+Limitations:
+• Requires large datasets for stable training.
+• No inductive bias for physical processes.
+• Purely data-driven — vulnerable to domain shift.
+Implication: Motivates structured constraints and robustness
+mechanisms for scarce thermal data.
+
+4 / 27
+
+Literature Review (2/5): GAN-Based Thermal Synthesis
+
+Paper: Zhang et al., “Infrared Image Generation via GANs” [2]
+Methodology:
+• CNN-based GAN for infrared/thermal image generation.
+• Uses adversarial and pixel-level reconstruction losses.
+Limitations:
+• Treats thermal data as grayscale intensity.
+• Does not enforce heat diffusion or energy conservation laws.
+• Limited evaluation under cross-dataset domain shift.
+Implication: Thermal synthesis requires thermodynamic constraints
+for realism and generalization.
+
+5 / 27
+
+Literature Review (3/5): Neural Ordinary Differential
+Equations
+Paper: Chen et al., “Neural Ordinary Differential Equations” [3]
+Methodology:
+• Models hidden representations using continuous-time dynamics.
+• Solves dh
+dt = f (h, t, θ) via numerical ODE solvers.
+Limitations:
+• Ensures smooth evolution but remains data-driven.
+• Does not incorporate governing physical PDEs.
+• No explicit robustness to unseen domains.
+Implication: Continuous modeling suits thermal dynamics but needs
+physics-aware regularization.
+
+6 / 27
+
+Literature Review (4/5): Liquid Neural Networks
+
+Paper: Hasani et al., “Liquid Time-Constant Networks” [4]
+Methodology:
+• Dynamical neural architecture with adaptive internal state
+evolution.
+• Governed by differential equations with learnable time constants.
+Limitations:
+• Primarily evaluated in control and time-series tasks.
+• No thermodynamic priors in visual domains.
+• Limited study in adversarial image synthesis.
+Implication: Dynamic discriminators improve adaptability but lack
+physics grounding.
+
+7 / 27
+
+Literature Review (5/5): LiquidGAN
+Paper: Sarath & Nair, “LiquidGAN” [5]
+Methodology:
+• Neural ODE-based generator for smooth latent evolution.
+• Liquid Neural Network discriminator for dynamic refinement.
+• Designed for thermal image synthesis under data scarcity.
+Limitations:
+• Fully data-driven; no PDE-based thermal constraints.
+• Thermal consistency evaluated only via image metrics (FID,
+SSIM).
+• No zero-shot cross-domain validation.
+Implication: Motivates Physics-Constrained and Zero-Shot extension
+of LiquidGAN.
+
+8 / 27
+
+Research Gap Summary
+
+Area
+
+Key Gap
+
+Physics Modeling
+
+No explicit enforcement of thermodynamic laws
+(e.g., heat diffusion); visual realism does not guarantee physical consistency.
+Evaluation relies only on image metrics (FID,
+SSIM, PSNR); lacks PDE-based residual or energy
+consistency validation.
+Training and testing performed within same
+dataset; no unseen-domain or cross-dataset evaluation.
+No mechanism ensuring stable latent behavior under domain shift (sensor variation, environment
+changes).
+
+Physics Validation
+
+Zero-Shot
+tion
+
+Generaliza-
+
+Cross-Domain Robustness
+
+9 / 27
+
+Proposed Methodology – Overview
+
+Physics-Constrained LiquidGAN (PC-LiquidGAN)
+• Neural ODE-based Generator
+• Liquid Neural Network Discriminator
+• Physics-aware thermal loss
+Generator Objective:
+LPC
+G = Ladv + λLrecon + µ1 Lflux + µ2 Lenergy
+
+10 / 27
+
+Proposed Methodology – Physics-Constrained LiquidGAN
+(PC-LiquidGAN) I
+1. Neural ODE-based Generator
+Latent dynamics are modeled as a continuous-time system:
+dz(t)
+= fθ (z(t)),
+dt
+
+T (t) = G (z(t))
+
+• z(t) : continuous latent representation
+• fθ : learnable ODE dynamics
+• G (·) : decoder producing thermal field
+This formulation allows direct integration of differential physical laws.
+2. Liquid Neural Network Discriminator
+dh(t)
+1
+= (fϕ (h(t) + xenc ) − h(t))
+dt
+τ
+11 / 27
+
+Proposed Methodology – Physics-Constrained LiquidGAN
+(PC-LiquidGAN) II
+• h(t) : liquid hidden state
+• τ : adaptive time constant
+• Provides dynamic feature refinement
+3. Governing Thermal Physics
+Heat diffusion equation:
+∂T (x, t)
+= α∇2 T (x, t)
+∂t
+Rewriting as residual:
+∂T
+− α∇2 T
+∂t
+For physically valid thermal synthesis:
+R(x, t) =
+
+12 / 27
+
+Proposed Methodology – Physics-Constrained LiquidGAN
+(PC-LiquidGAN) III
+R(x, t) = 0
+4. Conversion to Trainable Flux Loss
+Since exact equality cannot be enforced, we minimize the residual:
+Lflux =
+
+1 X
+N x
+
+
+
+∂T
+− α∇2 T
+∂t
+
+2
+
+Practical Discretization:
+∂T
+Tt+∆t − Tt−∆t
+≈
+∂t
+2∆t
+∇2 Ti,j = Ti+1,j + Ti−1,j + Ti,j+1 + Ti,j−1 − 4Ti,j
+Thus, the physics constraint becomes directly computable during training.
+13 / 27
+
+Proposed Methodology – Physics-Constrained LiquidGAN
+(PC-LiquidGAN) IV
+5. Energy Conservation Constraint
+Total thermal energy:
+X
+Ti,j (t)
+E (t) =
+i,j
+
+Energy regularization:
+Lenergy = (E (t + ∆t) − E (t))
+
+2
+
+This prevents artificial energy amplification in generated images.
+6. Final Physics-Constrained Generator Objective
+LPC
+G = Ladv + λLrecon + µ1 Lflux + µ2 Lenergy
+The generator parameters θ are optimized by minimizing LPC
+G , where
+adversarial realism, reconstruction fidelity, and thermodynamic consistency
+are jointly enforced.
+14 / 27
+
+Proposed Methodology – Implementation I
+
+1. Terminology Mapping (Physics ↔ GAN)
+• z(t) : latent feature representation evolving inside the Neural ODE
+generator
+• t : continuous ODE depth variable (not real physical time)
+• T (t) : generated thermal image tensor at ODE state t
+• ∆t : numerical step interval used by ODE solver
+• ∇2 T : spatial diffusion of generated image computed via convolution
+• R : residual measuring deviation from heat diffusion law
+• α : thermal diffusivity parameter (fixed or learnable)
+
+15 / 27
+
+Proposed Methodology – Implementation II
+Thus, temporal evolution corresponds to latent-space dynamics within the
+generator.
+2. ODE-Based Temporal Sampling
+The Neural ODE generator is solved using a numerical solver (e.g., RK4) to
+obtain multiple latent states:
+zt−∆t ,
+
+zt ,
+
+zt+∆t
+
+These are decoded to thermal images:
+Tt−∆t ,
+
+Tt ,
+
+Tt+∆t
+
+This enables approximation of temporal derivatives required for physics
+constraints.
+3. Temporal Derivative Approximation
+The time derivative is computed using central finite difference:
+16 / 27
+
+Proposed Methodology – Implementation III
+∂T
+Tt+∆t − Tt−∆t
+≈
+∂t
+2∆t
+This is implemented using tensor subtraction and scaling, ensuring full
+differentiability during backpropagation.
+4. Spatial Laplacian Computation
+The Laplacian operator is implemented using a fixed convolution kernel:
+
+
+0 1 0
+∇2 T = 1 −4 1 ∗ T
+0 1 0
+Convolution enables efficient and differentiable spatial diffusion modeling.
+5. Physics Residual Construction
+The residual is computed as:
+17 / 27
+
+Proposed Methodology – Implementation IV
+
+R=
+
+∂T
+− α∇2 T
+∂t
+
+The flux loss is defined as:
+Lflux = ∥R∥22
+This penalizes violations of the heat diffusion equation.
+6. Energy Regularization
+Total thermal energy is computed by spatial summation:
+X
+E (t) =
+Ti,j (t)
+i,j
+
+Energy loss:
+Lenergy = (E (t + ∆t) − E (t))
+
+2
+
+18 / 27
+
+Proposed Methodology – Implementation V
+
+This prevents artificial energy amplification in generated outputs.
+7. Integration into GAN Training
+The generator is optimized by minimizing:
+LPC
+G = Ladv + λLrecon + µ1 Lflux + µ2 Lenergy
+All physics operations are implemented as differentiable tensor
+computations, allowing gradients to propagate through the decoder, ODE
+solver, and generator parameters during adversarial training.
+
+19 / 27
+
+Proposed Methodology – Schematic Diagram
+Real
+Thermal
+Image
+
+Random
+Noise
+z
+
+GENERATOR
+
+DISCRIMINATOR
+
+Neural ODE
+Encoder-Decoder
+
+Liquid Neural Network
+
+Generated
+Thermal
+Image
+
+Probability
+[0, 1]
+
+Backprop
+
+Adversarial
+Loss
+
+Reconstruction
+Loss
+
+Physics Loss
+
+LG = Ladv +
+Lrecon + Lphys
+
+20 / 27
+
+Thermal Imaging Datasets Used
+
+Dataset
+KAIST Multispectral [5]
+
+Images
+9,500
+
+CBSR NIR Face [6]
+
+3,940
+
+Neonatal Thermal [5]
+
+11,000
+
+Sapota Bruise [5]
+
+5,030
+
+Chilli Disease [5]
+
+3,000
+
+Key Details
+Sensor specifications, capture
+conditions
+Wavelength range, pose variations
+Ethical considerations, respiratory syndromes
+Environmental controls, temporal aspects
+Growth stages, disease signatures
+
+Datasets selected to evaluate cross-domain robustness under heterogeneous
+thermal distributions.
+
+21 / 27
+
+Current Progress Status
+
+Completed Work:
+• Literature survey and state-of-the-art analysis
+• Identification of research gaps
+• Problem formulation
+• Mathematical modeling of physics constraints
+In Progress:
+• Implementation of baseline LiquidGAN
+• Integration of physics-informed loss
+
+22 / 27
+
+Work Plan for Next Two Months
+Month 1:
+• Complete baseline LiquidGAN implementation
+• Verify training stability and reproduce reported results
+• Design and integrate physics-aware loss components
+• Implement gradient consistency and energy conservation terms
+Month 2:
+• Train Physics-Constrained LiquidGAN
+• Conduct zero-shot cross-domain evaluation
+• Perform hyperparameter tuning (µ1 , µ2 )
+• Comparative evaluation with DCGAN and WGAN-GP
+• Conduct ablation study
+
+23 / 27
+
+Conclusion
+• Identified limitations of existing GAN-based thermal synthesis
+methods
+• Proposed Physics-Constrained LiquidGAN framework
+• Integrated thermodynamic constraints into adversarial learning
+• Designed zero-shot cross-domain evaluation strategy
+Current Status:
+• Baseline implementation in progress
+• Physics-aware loss integration under development
+Expected Contribution:
+• Improved thermodynamic consistency
+• Better cross-domain robustness under data scarcity
+24 / 27
+
+References I
+[1]
+
+I. Goodfellow et al., “Generative adversarial networks,”
+arXiv:1406.2661, 2014.
+
+[2]
+
+H. Zhang et al., “Infrared image generation using conditional
+gans,” IEEE Access, 2020.
+
+[3]
+
+R. T. Chen et al., “Neural ordinary differential equations,” in
+NeurIPS, 2018.
+
+[4]
+
+R. Hasani et al., “Liquid time-constant networks,” AAAI, 2021.
+
+[5]
+
+S. Sarath and J. Nair, “Liquidgan: Integrating liquid neural
+networks and neural odes for high-fidelity thermal image
+synthesis under data scarcity,” IEEE Access, 2025.
+
+[6]
+
+Y. Wang et al., “Thermal-to-visible image translation via
+adversarial learning,” in ICIP, 2021.
+
+25 / 27
+
+References II
+[7]
+
+M. Raissi et al., “Physics-informed neural networks,” Journal of
+Computational Physics, 2019.
+
+[8]
+
+K. He et al., “Deep domain adaptation for cross-dataset
+generalization,” IEEE TIP, 2022.
+
+[9]
+
+A. Radford, L. Metz, and S. Chintala, “Unsupervised
+representation learning with deep convolutional generative
+adversarial networks,” in ICLR, 2016.
+
+[10]
+
+M. Arjovsky, S. Chintala, and L. Bottou, “Wasserstein
+generative adversarial networks,” in ICML, 2017.
+
+[11]
+
+I. Gulrajani et al., “Improved training of wasserstein gans,” in
+NeurIPS, 2017.
+
+[12]
+
+P. Isola, J.-Y. Zhu, T. Zhou, and A. A. Efros, “Image-to-image
+translation with conditional adversarial networks,” in CVPR,
+2017.
+26 / 27
+
+References III
+
+[13]
+
+M. Heusel et al., “Gans trained by a two time-scale update rule
+converge to a local nash equilibrium,” in NeurIPS, 2017.
+
+27 / 27
+
+
