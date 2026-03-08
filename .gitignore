@@ -64,3 +64,5 @@ kaggle.json
 *.tmp
 list_kaist.py
 data/
+checkpoints_unet/
+results_unet/

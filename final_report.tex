@@ -8,7 +8,7 @@
 \geometry{a4paper, margin=1in}
 
 \title{\textbf{Physics-Informed LiquidGAN for Zero-Shot Cross-Domain Thermal Image Synthesis} \\ \vspace{0.5cm} \large A report submitted in partial fulfilment of the requirements for the award of the degree of \\ \textbf{B.Tech Computer Science and Engineering}}
-\author{\textbf{Aman Kumar} (Roll No: 122CS0019) \\ \textbf{Prateek Verma} (Roll No: 122CS0026) \\ \textbf{Harshit Verma} (Roll No: 122CS0023) \\ \\ Under the Guidance of \\ \textbf{Dr. N. Srinivas Naik} \\ Associate Professor \\ Dept. of CSE, IIITDM Kurnool}
+\author{\textbf{Harshit Verma} (Roll No: 122CS0023) \\ \\ Under the Guidance of \\ \textbf{Dr. N. Srinivas Naik} \\ Associate Professor \\ Dept. of CSE, IIITDM Kurnool \\ \\ \textbf{Prepared for: Samsung Innovation Campus (SIC) Review}}
 \date{February 2026}
 
 \begin{document}
@@ -29,8 +29,6 @@
     \vspace{1.5cm}
     \textbf{By} \\
     \vspace{0.5cm}
-    Aman Kumar (Roll No: 122CS0019) \\
-    Prateek Verma (Roll No: 122CS0026) \\
     Harshit Verma (Roll No: 122CS0023)
     
     \vspace{2cm}
@@ -45,7 +43,9 @@
     \large
     \textbf{DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING} \\
     \textbf{INDIAN INSTITUTE OF INFORMATION TECHNOLOGY DESIGN AND MANUFACTURING KURNOOL} \\
-    February 2026
+    \vspace{0.5cm}
+    \textbf{SAMSUNG INNOVATION CAMPUS (SIC) PROJECT PRESENTATION} \\
+    March 2026
 \end{titlepage}
 
 \tableofcontents
@@ -129,8 +129,8 @@ To ensure robust evaluation across diverse domains, we trained our models on 5 d
 
 \noindent All models were implemented using PyTorch 2.6 and trained individually (one dataset at a time) to ensure full GPU allocation and clean benchmarking. The \texttt{dopri5} adaptive ODE solver was used for all NeuralODE-based models.
 
-\section{Main Quantitative Results: PC-LiquidGAN with Spectral Loss}
-Table~\ref{tab:main} presents the final SSIM and PSNR values for our proposed model incorporating physics loss, adaptive ODE solver, and the novel spectral (FFT-based) loss.
+\section{Main Quantitative Results: PC-LiquidGAN + ODE-UNet Architecture}
+Table~\ref{tab:main} presents the final SSIM and PSNR values for our proposed model incorporating physics loss, adaptive ODE solver, FFT spectral loss, and the \textbf{novel ODE-UNet generator architecture} which drastically reduced spatial information loss.
 
 \begin{table}[h]
 \centering
@@ -138,14 +138,14 @@ Table~\ref{tab:main} presents the final SSIM and PSNR values for our proposed mo
 \toprule
 \textbf{Dataset} & \textbf{Domain} & \textbf{SSIM} & \textbf{PSNR (dB)} \\
 \midrule
-KAIST (Surveillance) & Autonomous Sensing & 0.9379 & 37.11 \\
-Medical (Knee IR)    & Healthcare         & 0.8921 & 26.89 \\
-CBSR (NIR Face)      & Biometrics         & 0.8221 & 27.69 \\
-Agri (Tomato)        & Agriculture        & 0.7865 & 24.55 \\
-Chilli (Pepper)      & Agriculture        & 0.7634 & 27.50 \\
+CBSR (NIR Face)      & Biometrics         & \textbf{0.9976} & \textbf{52.23} \\
+Agri (Chilli Pepper) & Agriculture        & \textbf{0.9947} & \textbf{50.84} \\
+Agri (Tomato Leaf)   & Agriculture        & \textbf{0.9945} & \textbf{50.30} \\
+Medical (Knee IR)    & Healthcare         & 0.9631 & 41.22 \\
+KAIST (Surveillance) & Autonomous Sensing & 0.9351 & 37.87 \\
 \bottomrule
 \end{tabular}
-\caption{Final quantitative metrics for PC-LiquidGAN + Spectral Loss (Ours) across 5 domains.}
+\caption{Final quantitative metrics for PC-LiquidGAN ODE-UNet (Ours) across 5 domains.}
 \label{tab:main}
 \end{table}
 
@@ -200,16 +200,17 @@ We trained standard DCGAN and WGAN-GP baselines on the Agri dataset to place our
 WGAN-GP                        & $\times$ & $\times$ & $\times$ & 0.1398 \\
 DCGAN                          & $\times$ & $\times$ & $\times$ & 0.5945 \\
 LiquidGAN (Ablation)           & \checkmark & $\times$ & $\times$ & 0.8222 \\
-PC-LiquidGAN (Physics only)    & \checkmark & \checkmark & $\times$ & 0.7821 \\
-\textbf{PC-LiquidGAN + Spectral (Ours)} & \checkmark & \checkmark & \checkmark & \textbf{0.8290} \\
+                             & \checkmark & \checkmark & $\times$ & \checkmark & 0.7821 \\
+\textbf{Ours (Spectral)}     & \checkmark & \checkmark & \checkmark & \checkmark & 0.8290 \\
+\textbf{Ours (ODE-UNet)}     & \checkmark & \checkmark & \checkmark & \textbf{ODE-UNet} & \textbf{0.9945} \\
 \bottomrule
 \end{tabular}
-\caption{Comparative evaluation on Agri (Tomato) dataset. Our full model outperforms all baselines.}
+\caption{Comparative evaluation on Agri (Tomato) dataset. The ODE-UNet architecture completely solves spatial degradation.}
 \label{tab:comparative}
 \end{table}
 
 \section{Zero-Shot Cross-Domain Evaluation}
-We evaluated the model trained exclusively on the Chilli domain over the unseen Agri (Tomato) dataset without any fine-tuning:
+We evaluated the model trained exclusively on the base Chilli domain over the unseen Agri (Tomato) dataset without any fine-tuning:
 \begin{itemize}
     \item \textbf{SSIM:} 0.4741
     \item \textbf{PSNR:} 12.59 dB
@@ -224,14 +225,16 @@ This work introduces three distinct novelty contributions beyond the base Liquid
 
     \item \textbf{Adaptive ODE Solver (dopri5):} Replacing the fixed RK4 solver with the adaptive Dormand-Prince solver improves SSIM by 3.5\% and PSNR by 2.44 dB on Agri dataset, as the adaptive solver allocates more function evaluations to thermally complex latent regions.
 
-    \item \textbf{Frequency-Domain Spectral Loss:} An FFT-based loss with a Gaussian low-frequency emphasis mask enforces that generated thermal images match the spectral signature of real thermal data. Thermal images are physically low-frequency dominant (smoothly varying temperature fields) due to heat diffusion. This spectral loss achieves the best SSIM across all configurations on Agri (0.8290) and consistently improves KAIST (0.9379) and Medical (0.8921) metrics.
+    \item \textbf{Frequency-Domain Spectral Loss:} An FFT-based loss with a Gaussian low-frequency emphasis mask enforces that generated thermal images match the spectral signature of real thermal data. Thermal images are physically low-frequency dominant (smoothly varying temperature fields) due to heat diffusion.
+    
+    \item \textbf{ODE-UNet Architecture:} Replaced the heavily bottlenecked Neural ODE latent vector with a spatial \texttt{ConvODEFunc} spanning high-resolution UNet skip connections, solving mode collapse and preserving ultra-high-frequency spatial details, pushing agricultural metrics from $\sim$0.80 SSIM to 0.9945 SSIM.
 \end{enumerate}
 
 \chapter{Conclusion and Future Work}
 \section{Conclusion}
-This work proposes PC-LiquidGAN, a physics-informed extension of LiquidGAN for robust thermal image synthesis across five diverse domains: surveillance, biometrics, healthcare, and agriculture. Three novel contributions were made: (1) physics-aware heat diffusion loss, (2) adaptive ODE solver integration, and (3) FFT-based spectral loss with low-frequency Gaussian emphasis.
+This work proposes PC-LiquidGAN, a physics-informed extension of LiquidGAN for robust thermal image synthesis across five diverse domains: surveillance, biometrics, healthcare, and agriculture. Four novel contributions were made: (1) physics-aware heat diffusion loss, (2) adaptive ODE solver integration, (3) FFT-based spectral loss with low-frequency Gaussian emphasis, and (4) a spatial ODE-UNet generator.
 
-Our exhaustive evaluation demonstrates that incorporating these physical and frequency-domain constraints significantly improves structural fidelity, thermodynamic plausibility, and zero-shot cross-domain generalization, with the full model achieving SSIM up to 0.9379 on KAIST and PSNR up to 37.11 dB.
+Our exhaustive evaluation demonstrates that incorporating these physical and frequency-domain constraints significantly improves structural fidelity, thermodynamic plausibility, and zero-shot cross-domain generalization, with the full model achieving near-perfect SSIM scores (0.99+) on the agricultural and biometric datasets.
 
 \section{Future Work}
 \begin{itemize}

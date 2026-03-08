@@ -155,3 +155,91 @@ class NeuralODEGenerator(nn.Module):
         dec = self.dec_fc(z1)             # [B, 512*4*4]
         dec = dec.view(B, 512, 4, 4)      # [B, 512, 4, 4]
         return self.decoder(dec)           # [B, 1, 256, 256]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  Neural ODE UNet Generator (High Fidelity)
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ConvODEFunc(nn.Module):
+    """Spatial ODE function for 2D feature maps."""
+    def __init__(self, dim: int):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv2d(dim + 1, dim, 3, 1, 1),
+            nn.InstanceNorm2d(dim),
+            nn.SiLU(inplace=True),
+            nn.Conv2d(dim, dim, 3, 1, 1),
+            nn.InstanceNorm2d(dim),
+            nn.SiLU(inplace=True),
+            nn.Conv2d(dim, dim, 3, 1, 1),
+        )
+        nn.init.zeros_(self.net[-1].weight)
+        nn.init.zeros_(self.net[-1].bias)
+
+    def forward(self, t: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
+        # x is [B, C, H, W]
+        t_vec = t.view(1, 1, 1, 1).expand(x.size(0), 1, x.size(2), x.size(3))
+        return self.net(torch.cat([x, t_vec], dim=1))
+
+
+class ODEUNetGenerator(nn.Module):
+    """
+    UNet Generator with Neural ODE Bottleneck.
+    Skip connections preserve high-frequency spatial details (sharpness).
+    """
+    def __init__(self, input_channels=3, output_channels=1, ode_method='euler'):
+        super().__init__()
+        self.ode_method = ode_method  # 'euler' or 'rk4' recommended for speed on Conv2D
+        self.rtol = 1e-3
+        self.atol = 1e-3
+
+        # Encoder
+        self.e1 = _enc_block(input_channels, 64, norm=False) # 128x128
+        self.e2 = _enc_block(64, 128)                        # 64x64
+        self.e3 = _enc_block(128, 256)                       # 32x32
+        self.e4 = _enc_block(256, 512)                       # 16x16
+
+        # Spatial Bottleneck + ConvODE
+        self.bottleneck_in = nn.Conv2d(512, 64, 1)           # Compress channels for fast ODE
+        self.ode_func = ConvODEFunc(64)                      # ODE operates on 64 channels
+        self.register_buffer('t_span', torch.tensor([0.0, 1.0]))
+        self.bottleneck_out = nn.Conv2d(64, 512, 1)
+
+        # Decoder (with skip connections)
+        self.d4 = _dec_block(512 + 512, 256) # 32x32
+        self.d3 = _dec_block(256 + 256, 128) # 64x64
+        self.d2 = _dec_block(128 + 128, 64)  # 128x128
+        self.d1 = nn.Sequential(
+            nn.ConvTranspose2d(64 + 64, 32, 4, 2, 1), # 256x256
+            nn.InstanceNorm2d(32),
+            nn.ReLU(True),
+            nn.Conv2d(32, output_channels, 3, 1, 1),
+            nn.Tanh()
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Downsample
+        e1 = self.e1(x)
+        e2 = self.e2(e1)
+        e3 = self.e3(e2)
+        e4 = self.e4(e3)
+
+        # ODE Bottleneck
+        z0 = self.bottleneck_in(e4)
+        t  = self.t_span.to(x.device)
+        z_t = odeint(
+            self.ode_func, z0, t,
+            method=self.ode_method,
+            rtol=self.rtol, atol=self.atol,
+            adjoint_params=list(self.ode_func.parameters())
+        )
+        z1 = z_t[-1]
+        b_out = self.bottleneck_out(z1)
+
+        # Upsample with Skip Connections
+        d4 = self.d4(torch.cat([b_out, e4], dim=1))
+        d3 = self.d3(torch.cat([d4, e3], dim=1))
+        d2 = self.d2(torch.cat([d3, e2], dim=1))
+        out = self.d1(torch.cat([d2, e1], dim=1))
+        return out

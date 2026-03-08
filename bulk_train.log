@@ -1,0 +1,520 @@
+nohup: ignoring input
+================================================================
+ Starting Bulk ODE-UNet Training for Remaining Domains
+================================================================
+
+
+[1/4] Training CHILLI domain...
+
+=================================================================
+  PC-LiquidGAN ODE-UNET Training
+  Dataset:        CHILLI
+  Architecture:   ODEUNetGenerator (Skip Connections)
+  ODE Solver:     Euler (spatial ODE map)
+=================================================================
+
+Dataset: 2227 | Batches/ep: 140
+
+/home/harshney/Desktop/PC-LiquidGAN/venv/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:227: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn(
+[UNet|WARMUP    ] Ep [  1/100]  D:0.0000  G:0.0483  L1:0.0483  Phys:0.0000  Spec:0.0000  Time:17.0s
+[UNet|WARMUP    ] Ep [  2/100]  D:0.0000  G:0.0282  L1:0.0282  Phys:0.0000  Spec:0.0000  Time:16.6s
+[UNet|WARMUP    ] Ep [  3/100]  D:0.0000  G:0.0240  L1:0.0240  Phys:0.0000  Spec:0.0000  Time:16.7s
+[UNet|WARMUP    ] Ep [  4/100]  D:0.0000  G:0.0203  L1:0.0203  Phys:0.0000  Spec:0.0000  Time:16.8s
+[UNet|WARMUP    ] Ep [  5/100]  D:0.0000  G:0.0181  L1:0.0181  Phys:0.0000  Spec:0.0000  Time:16.8s
+[UNet|WARMUP    ] Ep [  6/100]  D:0.0000  G:0.0185  L1:0.0185  Phys:0.0000  Spec:0.0000  Time:16.8s
+[UNet|WARMUP    ] Ep [  7/100]  D:0.0000  G:0.0162  L1:0.0162  Phys:0.0000  Spec:0.0000  Time:16.9s
+[UNet|WARMUP    ] Ep [  8/100]  D:0.0000  G:0.0143  L1:0.0143  Phys:0.0000  Spec:0.0000  Time:16.9s
+[UNet|WARMUP    ] Ep [  9/100]  D:0.0000  G:0.0152  L1:0.0152  Phys:0.0000  Spec:0.0000  Time:17.0s
+[UNet|WARMUP    ] Ep [ 10/100]  D:0.0000  G:0.0137  L1:0.0137  Phys:0.0000  Spec:0.0000  Time:17.0s
+  → SSIM: 0.9852  PSNR: 41.59 dB  ← Best! Saved.
+[UNet|σ=0.080   ] Ep [ 11/100]  D:0.6951  G:1.6102  L1:0.0265  Phys:0.0100  Spec:0.0003  Time:55.0s
+[UNet|σ=0.078   ] Ep [ 12/100]  D:0.6933  G:1.6226  L1:0.0242  Phys:0.0098  Spec:0.0002  Time:55.2s
+[UNet|σ=0.076   ] Ep [ 13/100]  D:0.6932  G:1.6159  L1:0.0231  Phys:0.0096  Spec:0.0002  Time:55.1s
+[UNet|σ=0.074   ] Ep [ 14/100]  D:0.6932  G:1.6229  L1:0.0237  Phys:0.0097  Spec:0.0002  Time:55.0s
+[UNet|σ=0.072   ] Ep [ 15/100]  D:0.6932  G:1.5946  L1:0.0208  Phys:0.0096  Spec:0.0002  Time:55.2s
+[UNet|σ=0.070   ] Ep [ 16/100]  D:0.6932  G:1.5924  L1:0.0206  Phys:0.0096  Spec:0.0002  Time:55.2s
+[UNet|σ=0.068   ] Ep [ 17/100]  D:0.6932  G:1.5765  L1:0.0190  Phys:0.0095  Spec:0.0001  Time:55.2s
+[UNet|σ=0.066   ] Ep [ 18/100]  D:0.6932  G:1.5950  L1:0.0208  Phys:0.0095  Spec:0.0002  Time:55.1s
+[UNet|σ=0.064   ] Ep [ 19/100]  D:0.6932  G:1.5842  L1:0.0197  Phys:0.0096  Spec:0.0002  Time:55.1s
+[UNet|σ=0.062   ] Ep [ 20/100]  D:0.6932  G:1.5828  L1:0.0196  Phys:0.0096  Spec:0.0002  Time:55.6s
+  → SSIM: 0.9837  PSNR: 36.78 dB
+[UNet|σ=0.060   ] Ep [ 21/100]  D:0.6932  G:1.5703  L1:0.0183  Phys:0.0093  Spec:0.0002  Time:55.3s
+[UNet|σ=0.058   ] Ep [ 22/100]  D:0.6932  G:1.5641  L1:0.0177  Phys:0.0095  Spec:0.0001  Time:55.2s
+[UNet|σ=0.056   ] Ep [ 23/100]  D:0.6932  G:1.5574  L1:0.0170  Phys:0.0094  Spec:0.0001  Time:56.2s
+[UNet|σ=0.054   ] Ep [ 24/100]  D:0.6931  G:1.5679  L1:0.0181  Phys:0.0094  Spec:0.0001  Time:55.9s
+[UNet|σ=0.052   ] Ep [ 25/100]  D:0.6931  G:1.5457  L1:0.0159  Phys:0.0093  Spec:0.0001  Time:56.4s
+[UNet|σ=0.050   ] Ep [ 26/100]  D:0.6931  G:1.5513  L1:0.0164  Phys:0.0094  Spec:0.0001  Time:55.4s
+[UNet|σ=0.048   ] Ep [ 27/100]  D:0.6931  G:1.5485  L1:0.0161  Phys:0.0094  Spec:0.0001  Time:54.9s
+[UNet|σ=0.046   ] Ep [ 28/100]  D:0.6931  G:1.5592  L1:0.0172  Phys:0.0094  Spec:0.0001  Time:55.0s
+[UNet|σ=0.044   ] Ep [ 29/100]  D:0.6931  G:1.5456  L1:0.0158  Phys:0.0094  Spec:0.0001  Time:55.0s
+[UNet|σ=0.042   ] Ep [ 30/100]  D:0.6931  G:1.5513  L1:0.0164  Phys:0.0094  Spec:0.0001  Time:55.1s
+  → SSIM: 0.9789  PSNR: 41.55 dB
+[UNet|σ=0.040   ] Ep [ 31/100]  D:0.6931  G:1.5612  L1:0.0174  Phys:0.0095  Spec:0.0001  Time:55.2s
+[UNet|σ=0.038   ] Ep [ 32/100]  D:0.6931  G:1.5336  L1:0.0146  Phys:0.0093  Spec:0.0001  Time:55.1s
+[UNet|σ=0.036   ] Ep [ 33/100]  D:0.6931  G:1.5352  L1:0.0148  Phys:0.0093  Spec:0.0001  Time:55.0s
+[UNet|σ=0.034   ] Ep [ 34/100]  D:0.6931  G:1.5329  L1:0.0146  Phys:0.0093  Spec:0.0001  Time:55.1s
+[UNet|σ=0.032   ] Ep [ 35/100]  D:0.6931  G:1.5370  L1:0.0150  Phys:0.0094  Spec:0.0001  Time:55.1s
+[UNet|σ=0.030   ] Ep [ 36/100]  D:0.6931  G:1.5343  L1:0.0147  Phys:0.0093  Spec:0.0001  Time:55.8s
+[UNet|σ=0.028   ] Ep [ 37/100]  D:0.6931  G:1.5254  L1:0.0138  Phys:0.0093  Spec:0.0001  Time:57.2s
+[UNet|σ=0.026   ] Ep [ 38/100]  D:0.6931  G:1.5221  L1:0.0135  Phys:0.0092  Spec:0.0001  Time:56.7s
+[UNet|σ=0.024   ] Ep [ 39/100]  D:0.6931  G:1.5240  L1:0.0137  Phys:0.0093  Spec:0.0001  Time:55.2s
+[UNet|σ=0.022   ] Ep [ 40/100]  D:0.6931  G:1.5218  L1:0.0135  Phys:0.0093  Spec:0.0001  Time:55.1s
+  → SSIM: 0.9935  PSNR: 47.36 dB  ← Best! Saved.
+[UNet|σ=0.020   ] Ep [ 41/100]  D:0.6931  G:1.5214  L1:0.0134  Phys:0.0093  Spec:0.0001  Time:55.1s
+[UNet|σ=0.018   ] Ep [ 42/100]  D:0.6931  G:1.5257  L1:0.0139  Phys:0.0093  Spec:0.0001  Time:55.0s
+[UNet|σ=0.016   ] Ep [ 43/100]  D:0.6931  G:1.5177  L1:0.0130  Phys:0.0093  Spec:0.0001  Time:55.0s
+[UNet|σ=0.014   ] Ep [ 44/100]  D:0.6931  G:1.5219  L1:0.0135  Phys:0.0093  Spec:0.0001  Time:55.3s
+[UNet|σ=0.012   ] Ep [ 45/100]  D:0.6931  G:1.5172  L1:0.0130  Phys:0.0093  Spec:0.0001  Time:55.2s
+[UNet|σ=0.010   ] Ep [ 46/100]  D:0.6931  G:1.5160  L1:0.0129  Phys:0.0092  Spec:0.0001  Time:55.7s
+[UNet|σ=0.008   ] Ep [ 47/100]  D:0.6931  G:1.5098  L1:0.0123  Phys:0.0092  Spec:0.0000  Time:57.3s
+[UNet|σ=0.006   ] Ep [ 48/100]  D:0.6931  G:1.5110  L1:0.0124  Phys:0.0092  Spec:0.0001  Time:57.0s
+[UNet|σ=0.004   ] Ep [ 49/100]  D:0.6931  G:1.5123  L1:0.0125  Phys:0.0092  Spec:0.0001  Time:57.0s
+[UNet|σ=0.002   ] Ep [ 50/100]  D:0.6931  G:1.5124  L1:0.0125  Phys:0.0093  Spec:0.0000  Time:56.9s
+  → SSIM: 0.9927  PSNR: 47.93 dB
+[UNet|σ=0.000   ] Ep [ 51/100]  D:0.6931  G:1.5067  L1:0.0120  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 52/100]  D:0.6931  G:1.5080  L1:0.0121  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 53/100]  D:0.6931  G:1.5038  L1:0.0117  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 54/100]  D:0.6931  G:1.5032  L1:0.0116  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 55/100]  D:0.6931  G:1.5032  L1:0.0116  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 56/100]  D:0.6931  G:1.5047  L1:0.0117  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 57/100]  D:0.6931  G:1.5003  L1:0.0113  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 58/100]  D:0.6931  G:1.5008  L1:0.0114  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 59/100]  D:0.6931  G:1.5063  L1:0.0119  Phys:0.0093  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 60/100]  D:0.6931  G:1.4984  L1:0.0111  Phys:0.0092  Spec:0.0000  Time:56.9s
+  → SSIM: 0.9932  PSNR: 48.76 dB
+[UNet|σ=0.000   ] Ep [ 61/100]  D:0.6931  G:1.4974  L1:0.0110  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 62/100]  D:0.6931  G:1.4970  L1:0.0110  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 63/100]  D:0.6931  G:1.4961  L1:0.0109  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 64/100]  D:0.6931  G:1.4961  L1:0.0109  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 65/100]  D:0.6931  G:1.4944  L1:0.0107  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 66/100]  D:0.6931  G:1.4946  L1:0.0107  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 67/100]  D:0.6931  G:1.4934  L1:0.0106  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 68/100]  D:0.6931  G:1.4931  L1:0.0106  Phys:0.0092  Spec:0.0000  Time:56.8s
+[UNet|σ=0.000   ] Ep [ 69/100]  D:0.6931  G:1.4924  L1:0.0105  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 70/100]  D:0.6931  G:1.4923  L1:0.0105  Phys:0.0092  Spec:0.0000  Time:56.9s
+  → SSIM: 0.9923  PSNR: 48.03 dB
+[UNet|σ=0.000   ] Ep [ 71/100]  D:0.6931  G:1.4923  L1:0.0105  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 72/100]  D:0.6931  G:1.4913  L1:0.0104  Phys:0.0092  Spec:0.0000  Time:57.0s
+[UNet|σ=0.000   ] Ep [ 73/100]  D:0.6931  G:1.4908  L1:0.0104  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 74/100]  D:0.6931  G:1.4918  L1:0.0105  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 75/100]  D:0.6931  G:1.4896  L1:0.0102  Phys:0.0092  Spec:0.0000  Time:56.9s
+[UNet|σ=0.000   ] Ep [ 76/100]  D:0.6931  G:1.4898  L1:0.0103  Phys:0.0092  Spec:0.0000  Time:55.3s
+[UNet|σ=0.000   ] Ep [ 77/100]  D:0.6931  G:1.4892  L1:0.0102  Phys:0.0092  Spec:0.0000  Time:55.0s
+[UNet|σ=0.000   ] Ep [ 78/100]  D:0.6931  G:1.4888  L1:0.0102  Phys:0.0092  Spec:0.0000  Time:55.1s
+[UNet|σ=0.000   ] Ep [ 79/100]  D:0.6931  G:1.4885  L1:0.0101  Phys:0.0092  Spec:0.0000  Time:55.0s
+[UNet|σ=0.000   ] Ep [ 80/100]  D:0.6931  G:1.4898  L1:0.0103  Phys:0.0092  Spec:0.0000  Time:55.4s
+  → SSIM: 0.9934  PSNR: 49.44 dB
+[UNet|σ=0.000   ] Ep [ 81/100]  D:0.6931  G:1.4879  L1:0.0101  Phys:0.0092  Spec:0.0000  Time:55.1s
+[UNet|σ=0.000   ] Ep [ 82/100]  D:0.6931  G:1.4884  L1:0.0101  Phys:0.0092  Spec:0.0000  Time:55.5s
+[UNet|σ=0.000   ] Ep [ 83/100]  D:0.6931  G:1.4880  L1:0.0101  Phys:0.0092  Spec:0.0000  Time:55.4s
+[UNet|σ=0.000   ] Ep [ 84/100]  D:0.6931  G:1.4876  L1:0.0100  Phys:0.0092  Spec:0.0000  Time:55.0s
+[UNet|σ=0.000   ] Ep [ 85/100]  D:0.6931  G:1.4873  L1:0.0100  Phys:0.0092  Spec:0.0000  Time:55.0s
+[UNet|σ=0.000   ] Ep [ 86/100]  D:0.6931  G:1.4873  L1:0.0100  Phys:0.0092  Spec:0.0000  Time:55.0s
+[UNet|σ=0.000   ] Ep [ 87/100]  D:0.6931  G:1.4871  L1:0.0100  Phys:0.0092  Spec:0.0000  Time:55.7s
+[UNet|σ=0.000   ] Ep [ 88/100]  D:0.6931  G:1.4868  L1:0.0100  Phys:0.0092  Spec:0.0000  Time:55.3s
+[UNet|σ=0.000   ] Ep [ 89/100]  D:0.6931  G:1.4869  L1:0.0100  Phys:0.0092  Spec:0.0000  Time:55.2s
+[UNet|σ=0.000   ] Ep [ 90/100]  D:0.6931  G:1.4866  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:55.1s
+  → SSIM: 0.9947  PSNR: 50.84 dB  ← Best! Saved.
+[UNet|σ=0.000   ] Ep [ 91/100]  D:0.6931  G:1.4866  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:55.4s
+[UNet|σ=0.000   ] Ep [ 92/100]  D:0.6931  G:1.4864  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:55.0s
+[UNet|σ=0.000   ] Ep [ 93/100]  D:0.6931  G:1.4864  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:55.3s
+[UNet|σ=0.000   ] Ep [ 94/100]  D:0.6931  G:1.4863  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:55.4s
+[UNet|σ=0.000   ] Ep [ 95/100]  D:0.6931  G:1.4863  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:55.1s
+[UNet|σ=0.000   ] Ep [ 96/100]  D:0.6931  G:1.4863  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:54.7s
+[UNet|σ=0.000   ] Ep [ 97/100]  D:0.6931  G:1.4863  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:54.8s
+[UNet|σ=0.000   ] Ep [ 98/100]  D:0.6931  G:1.4863  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:54.7s
+[UNet|σ=0.000   ] Ep [ 99/100]  D:0.6931  G:1.4863  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:54.7s
+[UNet|σ=0.000   ] Ep [100/100]  D:0.6931  G:1.4862  L1:0.0099  Phys:0.0092  Spec:0.0000  Time:54.8s
+  → SSIM: 0.9941  PSNR: 50.14 dB
+
+Best SSIM: 0.9947
+Done! UNet training complete for CHILLI
+
+
+[2/4] Training CBSR domain...
+
+=================================================================
+  PC-LiquidGAN ODE-UNET Training
+  Dataset:        CBSR
+  Architecture:   ODEUNetGenerator (Skip Connections)
+  ODE Solver:     Euler (spatial ODE map)
+=================================================================
+
+Dataset: 2700 | Batches/ep: 169
+
+/home/harshney/Desktop/PC-LiquidGAN/venv/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:227: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn(
+[UNet|WARMUP    ] Ep [  1/100]  D:0.0000  G:0.0783  L1:0.0783  Phys:0.0000  Spec:0.0000  Time:20.8s
+[UNet|WARMUP    ] Ep [  2/100]  D:0.0000  G:0.0181  L1:0.0181  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [  3/100]  D:0.0000  G:0.0142  L1:0.0142  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [  4/100]  D:0.0000  G:0.0123  L1:0.0123  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [  5/100]  D:0.0000  G:0.0109  L1:0.0109  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [  6/100]  D:0.0000  G:0.0102  L1:0.0102  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [  7/100]  D:0.0000  G:0.0094  L1:0.0094  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [  8/100]  D:0.0000  G:0.0089  L1:0.0089  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [  9/100]  D:0.0000  G:0.0084  L1:0.0084  Phys:0.0000  Spec:0.0000  Time:20.4s
+[UNet|WARMUP    ] Ep [ 10/100]  D:0.0000  G:0.0081  L1:0.0081  Phys:0.0000  Spec:0.0000  Time:20.4s
+  → SSIM: 0.9842  PSNR: 43.33 dB  ← Best! Saved.
+[UNet|σ=0.080   ] Ep [ 11/100]  D:0.6946  G:1.5508  L1:0.0196  Phys:0.0056  Spec:0.0004  Time:66.3s
+[UNet|σ=0.078   ] Ep [ 12/100]  D:0.6933  G:1.5602  L1:0.0177  Phys:0.0055  Spec:0.0003  Time:66.3s
+[UNet|σ=0.076   ] Ep [ 13/100]  D:0.6932  G:1.5529  L1:0.0168  Phys:0.0054  Spec:0.0003  Time:66.2s
+[UNet|σ=0.074   ] Ep [ 14/100]  D:0.6932  G:1.5313  L1:0.0145  Phys:0.0053  Spec:0.0002  Time:66.3s
+[UNet|σ=0.072   ] Ep [ 15/100]  D:0.6932  G:1.5141  L1:0.0128  Phys:0.0053  Spec:0.0002  Time:66.1s
+[UNet|σ=0.070   ] Ep [ 16/100]  D:0.6932  G:1.5199  L1:0.0133  Phys:0.0053  Spec:0.0002  Time:66.2s
+[UNet|σ=0.068   ] Ep [ 17/100]  D:0.6932  G:1.5074  L1:0.0121  Phys:0.0052  Spec:0.0002  Time:66.1s
+[UNet|σ=0.066   ] Ep [ 18/100]  D:0.6932  G:1.5045  L1:0.0118  Phys:0.0052  Spec:0.0002  Time:66.3s
+[UNet|σ=0.064   ] Ep [ 19/100]  D:0.6932  G:1.4905  L1:0.0104  Phys:0.0052  Spec:0.0001  Time:66.1s
+[UNet|σ=0.062   ] Ep [ 20/100]  D:0.6932  G:1.4913  L1:0.0105  Phys:0.0052  Spec:0.0001  Time:66.1s
+  → SSIM: 0.9941  PSNR: 45.69 dB  ← Best! Saved.
+[UNet|σ=0.060   ] Ep [ 21/100]  D:0.6931  G:1.4814  L1:0.0095  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.058   ] Ep [ 22/100]  D:0.6931  G:1.4773  L1:0.0091  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.056   ] Ep [ 23/100]  D:0.6931  G:1.4775  L1:0.0091  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.054   ] Ep [ 24/100]  D:0.6931  G:1.4753  L1:0.0089  Phys:0.0052  Spec:0.0001  Time:66.3s
+[UNet|σ=0.052   ] Ep [ 25/100]  D:0.6931  G:1.4752  L1:0.0088  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.050   ] Ep [ 26/100]  D:0.6931  G:1.4696  L1:0.0083  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.048   ] Ep [ 27/100]  D:0.6931  G:1.4660  L1:0.0079  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.046   ] Ep [ 28/100]  D:0.6931  G:1.4639  L1:0.0077  Phys:0.0052  Spec:0.0001  Time:66.3s
+[UNet|σ=0.044   ] Ep [ 29/100]  D:0.6931  G:1.4623  L1:0.0076  Phys:0.0052  Spec:0.0001  Time:66.3s
+[UNet|σ=0.042   ] Ep [ 30/100]  D:0.6931  G:1.4632  L1:0.0076  Phys:0.0052  Spec:0.0001  Time:66.2s
+  → SSIM: 0.9973  PSNR: 50.96 dB  ← Best! Saved.
+[UNet|σ=0.040   ] Ep [ 31/100]  D:0.6931  G:1.4602  L1:0.0073  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.038   ] Ep [ 32/100]  D:0.6931  G:1.4585  L1:0.0072  Phys:0.0052  Spec:0.0001  Time:66.3s
+[UNet|σ=0.036   ] Ep [ 33/100]  D:0.6931  G:1.4569  L1:0.0070  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.034   ] Ep [ 34/100]  D:0.6931  G:1.4563  L1:0.0069  Phys:0.0052  Spec:0.0001  Time:66.2s
+[UNet|σ=0.032   ] Ep [ 35/100]  D:0.6931  G:1.4540  L1:0.0067  Phys:0.0052  Spec:0.0000  Time:66.1s
+[UNet|σ=0.030   ] Ep [ 36/100]  D:0.6931  G:1.4543  L1:0.0068  Phys:0.0052  Spec:0.0000  Time:66.1s
+[UNet|σ=0.028   ] Ep [ 37/100]  D:0.6931  G:1.4515  L1:0.0065  Phys:0.0052  Spec:0.0000  Time:66.2s
+[UNet|σ=0.026   ] Ep [ 38/100]  D:0.6931  G:1.4508  L1:0.0064  Phys:0.0052  Spec:0.0000  Time:66.1s
+[UNet|σ=0.024   ] Ep [ 39/100]  D:0.6931  G:1.4506  L1:0.0064  Phys:0.0052  Spec:0.0000  Time:66.1s
+[UNet|σ=0.022   ] Ep [ 40/100]  D:0.6931  G:1.4482  L1:0.0061  Phys:0.0052  Spec:0.0000  Time:66.2s
+  → SSIM: 0.9976  PSNR: 52.23 dB  ← Best! Saved.
+[UNet|σ=0.020   ] Ep [ 41/100]  D:0.6931  G:1.4509  L1:0.0064  Phys:0.0052  Spec:0.0000  Time:66.2s
+[UNet|σ=0.018   ] Ep [ 42/100]  D:0.6931  G:1.4469  L1:0.0060  Phys:0.0052  Spec:0.0000  Time:66.2s
+[UNet|σ=0.016   ] Ep [ 43/100]  D:0.6931  G:1.4459  L1:0.0059  Phys:0.0052  Spec:0.0000  Time:67.0s
+[UNet|σ=0.014   ] Ep [ 44/100]  D:0.6931  G:1.4445  L1:0.0058  Phys:0.0052  Spec:0.0000  Time:67.0s
+[UNet|σ=0.012   ] Ep [ 45/100]  D:0.6931  G:1.4441  L1:0.0057  Phys:0.0052  Spec:0.0000  Time:68.8s
+[UNet|σ=0.010   ] Ep [ 46/100]  D:0.6931  G:1.4457  L1:0.0059  Phys:0.0052  Spec:0.0000  Time:67.9s
+[UNet|σ=0.008   ] Ep [ 47/100]  D:0.6931  G:1.4435  L1:0.0057  Phys:0.0052  Spec:0.0000  Time:67.9s
+[UNet|σ=0.006   ] Ep [ 48/100]  D:0.6931  G:1.4416  L1:0.0055  Phys:0.0052  Spec:0.0000  Time:66.5s
+[UNet|σ=0.004   ] Ep [ 49/100]  D:0.6931  G:1.4412  L1:0.0054  Phys:0.0052  Spec:0.0000  Time:66.5s
+[UNet|σ=0.002   ] Ep [ 50/100]  D:0.6931  G:1.4406  L1:0.0054  Phys:0.0052  Spec:0.0000  Time:66.5s
+  → SSIM: 0.9975  PSNR: 51.48 dB
+[UNet|σ=0.000   ] Ep [ 51/100]  D:0.6931  G:1.4397  L1:0.0053  Phys:0.0052  Spec:0.0000  Time:66.4s
+[UNet|σ=0.000   ] Ep [ 52/100]  D:0.6931  G:1.4393  L1:0.0053  Phys:0.0052  Spec:0.0000  Time:66.3s
+[UNet|σ=0.000   ] Ep [ 53/100]  D:0.6931  G:1.4383  L1:0.0051  Phys:0.0052  Spec:0.0000  Time:66.5s
+[UNet|σ=0.000   ] Ep [ 54/100]  D:0.6931  G:1.4379  L1:0.0051  Phys:0.0052  Spec:0.0000  Time:66.3s
+[UNet|σ=0.000   ] Ep [ 55/100]  D:0.6931  G:1.4376  L1:0.0051  Phys:0.0052  Spec:0.0000  Time:66.4s
+[UNet|σ=0.000   ] Ep [ 56/100]  D:0.6931  G:1.4374  L1:0.0051  Phys:0.0052  Spec:0.0000  Time:66.5s
+[UNet|σ=0.000   ] Ep [ 57/100]  D:0.6931  G:1.4360  L1:0.0049  Phys:0.0052  Spec:0.0000  Time:66.6s
+[UNet|σ=0.000   ] Ep [ 58/100]  D:0.6931  G:1.4359  L1:0.0049  Phys:0.0052  Spec:0.0000  Time:66.3s
+[UNet|σ=0.000   ] Ep [ 59/100]  D:0.6931  G:1.4351  L1:0.0048  Phys:0.0052  Spec:0.0000  Time:66.4s
+[UNet|σ=0.000   ] Ep [ 60/100]  D:0.6931  G:1.4347  L1:0.0048  Phys:0.0052  Spec:0.0000  Time:66.3s
+  → SSIM: 0.9962  PSNR: 50.33 dB
+[UNet|σ=0.000   ] Ep [ 61/100]  D:0.6931  G:1.4342  L1:0.0047  Phys:0.0052  Spec:0.0000  Time:66.4s
+[UNet|σ=0.000   ] Ep [ 62/100]  D:0.6931  G:1.4339  L1:0.0047  Phys:0.0053  Spec:0.0000  Time:66.3s
+[UNet|σ=0.000   ] Ep [ 63/100]  D:0.6931  G:1.4333  L1:0.0047  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 64/100]  D:0.6931  G:1.4332  L1:0.0046  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 65/100]  D:0.6931  G:1.4325  L1:0.0046  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 66/100]  D:0.6931  G:1.4322  L1:0.0045  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 67/100]  D:0.6931  G:1.4320  L1:0.0045  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 68/100]  D:0.6931  G:1.4314  L1:0.0045  Phys:0.0053  Spec:0.0000  Time:66.0s
+[UNet|σ=0.000   ] Ep [ 69/100]  D:0.6931  G:1.4314  L1:0.0045  Phys:0.0053  Spec:0.0000  Time:66.0s
+[UNet|σ=0.000   ] Ep [ 70/100]  D:0.6931  G:1.4308  L1:0.0044  Phys:0.0053  Spec:0.0000  Time:66.0s
+  → SSIM: 0.9979  PSNR: 53.16 dB  ← Best! Saved.
+[UNet|σ=0.000   ] Ep [ 71/100]  D:0.6931  G:1.4305  L1:0.0044  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 72/100]  D:0.6931  G:1.4302  L1:0.0043  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 73/100]  D:0.6931  G:1.4300  L1:0.0043  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 74/100]  D:0.6931  G:1.4298  L1:0.0043  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 75/100]  D:0.6931  G:1.4295  L1:0.0043  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 76/100]  D:0.6931  G:1.4292  L1:0.0042  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 77/100]  D:0.6931  G:1.4290  L1:0.0042  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 78/100]  D:0.6931  G:1.4288  L1:0.0042  Phys:0.0053  Spec:0.0000  Time:66.0s
+[UNet|σ=0.000   ] Ep [ 79/100]  D:0.6931  G:1.4287  L1:0.0042  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 80/100]  D:0.6931  G:1.4285  L1:0.0042  Phys:0.0053  Spec:0.0000  Time:66.0s
+  → SSIM: 0.9986  PSNR: 54.04 dB  ← Best! Saved.
+[UNet|σ=0.000   ] Ep [ 81/100]  D:0.6931  G:1.4283  L1:0.0042  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 82/100]  D:0.6931  G:1.4283  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 83/100]  D:0.6931  G:1.4281  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 84/100]  D:0.6931  G:1.4280  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 85/100]  D:0.6931  G:1.4279  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.0s
+[UNet|σ=0.000   ] Ep [ 86/100]  D:0.6931  G:1.4278  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.0s
+[UNet|σ=0.000   ] Ep [ 87/100]  D:0.6931  G:1.4277  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 88/100]  D:0.6931  G:1.4277  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 89/100]  D:0.6931  G:1.4276  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 90/100]  D:0.6931  G:1.4275  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+  → SSIM: 0.9988  PSNR: 55.15 dB  ← Best! Saved.
+[UNet|σ=0.000   ] Ep [ 91/100]  D:0.6931  G:1.4275  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 92/100]  D:0.6931  G:1.4275  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 93/100]  D:0.6931  G:1.4274  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.0s
+[UNet|σ=0.000   ] Ep [ 94/100]  D:0.6931  G:1.4274  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 95/100]  D:0.6931  G:1.4274  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.3s
+[UNet|σ=0.000   ] Ep [ 96/100]  D:0.6931  G:1.4274  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 97/100]  D:0.6931  G:1.4273  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [ 98/100]  D:0.6931  G:1.4273  L1:0.0041  Phys:0.0053  Spec:0.0000  Time:66.2s
+[UNet|σ=0.000   ] Ep [ 99/100]  D:0.6931  G:1.4273  L1:0.0040  Phys:0.0053  Spec:0.0000  Time:66.1s
+[UNet|σ=0.000   ] Ep [100/100]  D:0.6931  G:1.4273  L1:0.0040  Phys:0.0053  Spec:0.0000  Time:66.2s
+  → SSIM: 0.9987  PSNR: 53.78 dB
+
+Best SSIM: 0.9988
+Done! UNet training complete for CBSR
+
+
+[3/4] Training MEDICAL domain...
+
+=================================================================
+  PC-LiquidGAN ODE-UNET Training
+  Dataset:        MEDICAL
+  Architecture:   ODEUNetGenerator (Skip Connections)
+  ODE Solver:     Euler (spatial ODE map)
+=================================================================
+
+Dataset: 4500 | Batches/ep: 282
+
+/home/harshney/Desktop/PC-LiquidGAN/venv/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:227: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn(
+[UNet|WARMUP    ] Ep [  1/100]  D:0.0000  G:0.0740  L1:0.0740  Phys:0.0000  Spec:0.0000  Time:34.2s
+[UNet|WARMUP    ] Ep [  2/100]  D:0.0000  G:0.0540  L1:0.0540  Phys:0.0000  Spec:0.0000  Time:33.9s
+[UNet|WARMUP    ] Ep [  3/100]  D:0.0000  G:0.0481  L1:0.0481  Phys:0.0000  Spec:0.0000  Time:33.8s
+[UNet|WARMUP    ] Ep [  4/100]  D:0.0000  G:0.0463  L1:0.0463  Phys:0.0000  Spec:0.0000  Time:33.9s
+[UNet|WARMUP    ] Ep [  5/100]  D:0.0000  G:0.0442  L1:0.0442  Phys:0.0000  Spec:0.0000  Time:33.9s
+[UNet|WARMUP    ] Ep [  6/100]  D:0.0000  G:0.0432  L1:0.0432  Phys:0.0000  Spec:0.0000  Time:33.8s
+[UNet|WARMUP    ] Ep [  7/100]  D:0.0000  G:0.0424  L1:0.0424  Phys:0.0000  Spec:0.0000  Time:33.9s
+[UNet|WARMUP    ] Ep [  8/100]  D:0.0000  G:0.0419  L1:0.0419  Phys:0.0000  Spec:0.0000  Time:33.8s
+[UNet|WARMUP    ] Ep [  9/100]  D:0.0000  G:0.0410  L1:0.0410  Phys:0.0000  Spec:0.0000  Time:33.9s
+[UNet|WARMUP    ] Ep [ 10/100]  D:0.0000  G:0.0407  L1:0.0407  Phys:0.0000  Spec:0.0000  Time:33.9s
+  → SSIM: 0.9673  PSNR: 35.82 dB  ← Best! Saved.
+[UNet|σ=0.080   ] Ep [ 11/100]  D:0.6685  G:2.1901  L1:0.0847  Phys:0.0096  Spec:0.0065  Time:110.2s
+[UNet|σ=0.078   ] Ep [ 12/100]  D:0.6530  G:2.1706  L1:0.0858  Phys:0.0096  Spec:0.0067  Time:110.2s
+[UNet|σ=0.076   ] Ep [ 13/100]  D:0.6273  G:2.1369  L1:0.0830  Phys:0.0092  Spec:0.0064  Time:110.2s
+[UNet|σ=0.074   ] Ep [ 14/100]  D:0.6414  G:2.1515  L1:0.0846  Phys:0.0093  Spec:0.0066  Time:110.2s
+[UNet|σ=0.072   ] Ep [ 15/100]  D:0.6586  G:2.1429  L1:0.0852  Phys:0.0092  Spec:0.0067  Time:110.1s
+[UNet|σ=0.070   ] Ep [ 16/100]  D:0.6640  G:2.1378  L1:0.0839  Phys:0.0091  Spec:0.0065  Time:110.0s
+[UNet|σ=0.068   ] Ep [ 17/100]  D:0.6720  G:2.1369  L1:0.0846  Phys:0.0091  Spec:0.0066  Time:110.1s
+[UNet|σ=0.066   ] Ep [ 18/100]  D:0.6677  G:2.1444  L1:0.0828  Phys:0.0089  Spec:0.0064  Time:110.4s
+[UNet|σ=0.064   ] Ep [ 19/100]  D:0.6460  G:2.1377  L1:0.0817  Phys:0.0088  Spec:0.0063  Time:110.3s
+[UNet|σ=0.062   ] Ep [ 20/100]  D:0.6649  G:2.1299  L1:0.0838  Phys:0.0089  Spec:0.0065  Time:110.4s
+  → SSIM: 0.9656  PSNR: 32.44 dB
+[UNet|σ=0.060   ] Ep [ 21/100]  D:0.6657  G:2.1316  L1:0.0837  Phys:0.0089  Spec:0.0065  Time:110.2s
+[UNet|σ=0.058   ] Ep [ 22/100]  D:0.6649  G:2.1217  L1:0.0833  Phys:0.0089  Spec:0.0065  Time:110.2s
+[UNet|σ=0.056   ] Ep [ 23/100]  D:0.6633  G:2.1146  L1:0.0824  Phys:0.0089  Spec:0.0064  Time:110.1s
+[UNet|σ=0.054   ] Ep [ 24/100]  D:0.6525  G:2.1057  L1:0.0806  Phys:0.0086  Spec:0.0062  Time:110.2s
+[UNet|σ=0.052   ] Ep [ 25/100]  D:0.6688  G:2.1230  L1:0.0839  Phys:0.0090  Spec:0.0067  Time:110.2s
+[UNet|σ=0.050   ] Ep [ 26/100]  D:0.6570  G:2.0873  L1:0.0809  Phys:0.0088  Spec:0.0064  Time:110.2s
+[UNet|σ=0.048   ] Ep [ 27/100]  D:0.6658  G:2.1123  L1:0.0819  Phys:0.0089  Spec:0.0064  Time:110.2s
+[UNet|σ=0.046   ] Ep [ 28/100]  D:0.6501  G:2.0823  L1:0.0799  Phys:0.0089  Spec:0.0062  Time:110.2s
+[UNet|σ=0.044   ] Ep [ 29/100]  D:0.6534  G:2.0945  L1:0.0808  Phys:0.0089  Spec:0.0063  Time:110.1s
+[UNet|σ=0.042   ] Ep [ 30/100]  D:0.6539  G:2.0894  L1:0.0779  Phys:0.0086  Spec:0.0060  Time:110.2s
+  → SSIM: 0.9619  PSNR: 35.27 dB
+[UNet|σ=0.040   ] Ep [ 31/100]  D:0.6547  G:2.0884  L1:0.0802  Phys:0.0088  Spec:0.0063  Time:110.2s
+[UNet|σ=0.038   ] Ep [ 32/100]  D:0.6527  G:2.0800  L1:0.0783  Phys:0.0087  Spec:0.0061  Time:110.3s
+[UNet|σ=0.036   ] Ep [ 33/100]  D:0.6657  G:2.0656  L1:0.0801  Phys:0.0089  Spec:0.0063  Time:110.3s
+[UNet|σ=0.034   ] Ep [ 34/100]  D:0.6667  G:2.0766  L1:0.0800  Phys:0.0089  Spec:0.0063  Time:110.1s
+[UNet|σ=0.032   ] Ep [ 35/100]  D:0.6664  G:2.0797  L1:0.0792  Phys:0.0088  Spec:0.0062  Time:110.2s
+[UNet|σ=0.030   ] Ep [ 36/100]  D:0.6668  G:2.0708  L1:0.0784  Phys:0.0088  Spec:0.0061  Time:110.2s
+[UNet|σ=0.028   ] Ep [ 37/100]  D:0.6749  G:2.0731  L1:0.0803  Phys:0.0089  Spec:0.0063  Time:110.4s
+[UNet|σ=0.026   ] Ep [ 38/100]  D:0.6698  G:2.0619  L1:0.0774  Phys:0.0086  Spec:0.0060  Time:110.2s
+[UNet|σ=0.024   ] Ep [ 39/100]  D:0.6678  G:2.0783  L1:0.0777  Phys:0.0087  Spec:0.0060  Time:110.2s
+[UNet|σ=0.022   ] Ep [ 40/100]  D:0.6755  G:2.0623  L1:0.0792  Phys:0.0088  Spec:0.0062  Time:110.2s
+  → SSIM: 0.9683  PSNR: 32.46 dB  ← Best! Saved.
+[UNet|σ=0.020   ] Ep [ 41/100]  D:0.6687  G:2.0531  L1:0.0780  Phys:0.0087  Spec:0.0061  Time:110.1s
+[UNet|σ=0.018   ] Ep [ 42/100]  D:0.6666  G:2.0446  L1:0.0767  Phys:0.0086  Spec:0.0059  Time:110.3s
+[UNet|σ=0.016   ] Ep [ 43/100]  D:0.6684  G:2.0298  L1:0.0758  Phys:0.0085  Spec:0.0058  Time:110.3s
+[UNet|σ=0.014   ] Ep [ 44/100]  D:0.6737  G:2.0486  L1:0.0778  Phys:0.0088  Spec:0.0062  Time:110.3s
+[UNet|σ=0.012   ] Ep [ 45/100]  D:0.6707  G:2.0484  L1:0.0766  Phys:0.0087  Spec:0.0060  Time:110.1s
+[UNet|σ=0.010   ] Ep [ 46/100]  D:0.6602  G:2.0264  L1:0.0750  Phys:0.0085  Spec:0.0058  Time:110.2s
+[UNet|σ=0.008   ] Ep [ 47/100]  D:0.6791  G:2.0194  L1:0.0780  Phys:0.0088  Spec:0.0063  Time:110.1s
+[UNet|σ=0.006   ] Ep [ 48/100]  D:0.6678  G:2.0340  L1:0.0756  Phys:0.0086  Spec:0.0060  Time:110.2s
+[UNet|σ=0.004   ] Ep [ 49/100]  D:0.6758  G:2.0501  L1:0.0778  Phys:0.0087  Spec:0.0061  Time:110.3s
+[UNet|σ=0.002   ] Ep [ 50/100]  D:0.6764  G:2.0388  L1:0.0767  Phys:0.0087  Spec:0.0060  Time:110.2s
+  → SSIM: 0.8823  PSNR: 32.36 dB
+[UNet|σ=0.000   ] Ep [ 51/100]  D:0.6821  G:2.0443  L1:0.0779  Phys:0.0089  Spec:0.0061  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 52/100]  D:0.6733  G:2.0421  L1:0.0746  Phys:0.0086  Spec:0.0058  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 53/100]  D:0.6655  G:2.0380  L1:0.0732  Phys:0.0084  Spec:0.0057  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 54/100]  D:0.6797  G:2.0181  L1:0.0757  Phys:0.0087  Spec:0.0060  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 55/100]  D:0.6825  G:2.0481  L1:0.0771  Phys:0.0089  Spec:0.0061  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 56/100]  D:0.6717  G:1.9982  L1:0.0748  Phys:0.0086  Spec:0.0059  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 57/100]  D:0.6784  G:2.0333  L1:0.0749  Phys:0.0087  Spec:0.0059  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 58/100]  D:0.6769  G:2.0409  L1:0.0753  Phys:0.0087  Spec:0.0060  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 59/100]  D:0.6762  G:2.0000  L1:0.0743  Phys:0.0086  Spec:0.0059  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 60/100]  D:0.6788  G:2.0191  L1:0.0745  Phys:0.0086  Spec:0.0058  Time:110.3s
+  → SSIM: 0.9661  PSNR: 39.36 dB
+[UNet|σ=0.000   ] Ep [ 61/100]  D:0.6757  G:1.9922  L1:0.0727  Phys:0.0084  Spec:0.0057  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 62/100]  D:0.6829  G:2.0127  L1:0.0748  Phys:0.0087  Spec:0.0060  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 63/100]  D:0.6758  G:1.9836  L1:0.0730  Phys:0.0086  Spec:0.0059  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 64/100]  D:0.6758  G:1.9909  L1:0.0724  Phys:0.0085  Spec:0.0057  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 65/100]  D:0.6813  G:2.0288  L1:0.0741  Phys:0.0087  Spec:0.0058  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 66/100]  D:0.6779  G:1.9924  L1:0.0724  Phys:0.0085  Spec:0.0058  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 67/100]  D:0.6804  G:1.9931  L1:0.0735  Phys:0.0087  Spec:0.0060  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 68/100]  D:0.6790  G:2.0077  L1:0.0731  Phys:0.0086  Spec:0.0057  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 69/100]  D:0.6819  G:1.9879  L1:0.0719  Phys:0.0085  Spec:0.0057  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 70/100]  D:0.6751  G:2.0090  L1:0.0724  Phys:0.0086  Spec:0.0058  Time:110.2s
+  → SSIM: 0.9467  PSNR: 34.62 dB
+[UNet|σ=0.000   ] Ep [ 71/100]  D:0.6808  G:1.9722  L1:0.0722  Phys:0.0086  Spec:0.0059  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 72/100]  D:0.6774  G:1.9922  L1:0.0715  Phys:0.0085  Spec:0.0058  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 73/100]  D:0.6769  G:1.9970  L1:0.0716  Phys:0.0086  Spec:0.0057  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 74/100]  D:0.6814  G:1.9717  L1:0.0712  Phys:0.0085  Spec:0.0057  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 75/100]  D:0.6861  G:1.9978  L1:0.0727  Phys:0.0087  Spec:0.0059  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 76/100]  D:0.6795  G:1.9648  L1:0.0701  Phys:0.0084  Spec:0.0056  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 77/100]  D:0.6841  G:2.0065  L1:0.0728  Phys:0.0087  Spec:0.0059  Time:109.9s
+[UNet|σ=0.000   ] Ep [ 78/100]  D:0.6834  G:1.9927  L1:0.0711  Phys:0.0086  Spec:0.0057  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 79/100]  D:0.6856  G:1.9967  L1:0.0713  Phys:0.0086  Spec:0.0057  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 80/100]  D:0.6769  G:1.9766  L1:0.0696  Phys:0.0085  Spec:0.0056  Time:110.1s
+  → SSIM: 0.9696  PSNR: 37.96 dB  ← Best! Saved.
+[UNet|σ=0.000   ] Ep [ 81/100]  D:0.6854  G:1.9763  L1:0.0712  Phys:0.0086  Spec:0.0058  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 82/100]  D:0.6822  G:1.9796  L1:0.0700  Phys:0.0085  Spec:0.0057  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 83/100]  D:0.6835  G:1.9751  L1:0.0711  Phys:0.0086  Spec:0.0059  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 84/100]  D:0.6850  G:1.9885  L1:0.0708  Phys:0.0087  Spec:0.0058  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 85/100]  D:0.6842  G:2.0047  L1:0.0704  Phys:0.0086  Spec:0.0056  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 86/100]  D:0.6870  G:1.9975  L1:0.0707  Phys:0.0087  Spec:0.0057  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 87/100]  D:0.6789  G:1.9962  L1:0.0685  Phys:0.0085  Spec:0.0055  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 88/100]  D:0.6893  G:1.9847  L1:0.0713  Phys:0.0088  Spec:0.0058  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 89/100]  D:0.6790  G:1.9662  L1:0.0686  Phys:0.0084  Spec:0.0056  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 90/100]  D:0.6813  G:1.9895  L1:0.0698  Phys:0.0086  Spec:0.0058  Time:110.1s
+  → SSIM: 0.9665  PSNR: 36.08 dB
+[UNet|σ=0.000   ] Ep [ 91/100]  D:0.6817  G:1.9453  L1:0.0684  Phys:0.0084  Spec:0.0056  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 92/100]  D:0.6908  G:1.9843  L1:0.0723  Phys:0.0088  Spec:0.0061  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 93/100]  D:0.6851  G:1.9999  L1:0.0700  Phys:0.0086  Spec:0.0058  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 94/100]  D:0.6780  G:1.9982  L1:0.0680  Phys:0.0084  Spec:0.0055  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 95/100]  D:0.6833  G:1.9699  L1:0.0686  Phys:0.0085  Spec:0.0056  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 96/100]  D:0.6865  G:1.9759  L1:0.0693  Phys:0.0086  Spec:0.0057  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 97/100]  D:0.6897  G:1.9782  L1:0.0700  Phys:0.0087  Spec:0.0058  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 98/100]  D:0.6845  G:1.9889  L1:0.0696  Phys:0.0086  Spec:0.0057  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 99/100]  D:0.6866  G:1.9881  L1:0.0696  Phys:0.0086  Spec:0.0057  Time:110.2s
+[UNet|σ=0.000   ] Ep [100/100]  D:0.6866  G:1.9860  L1:0.0692  Phys:0.0086  Spec:0.0057  Time:110.2s
+  → SSIM: 0.9371  PSNR: 30.45 dB
+
+Best SSIM: 0.9696
+Done! UNet training complete for MEDICAL
+
+
+[4/4] Training KAIST domain...
+
+=================================================================
+  PC-LiquidGAN ODE-UNET Training
+  Dataset:        KAIST
+  Architecture:   ODEUNetGenerator (Skip Connections)
+  ODE Solver:     Euler (spatial ODE map)
+=================================================================
+
+Dataset: 4500 | Batches/ep: 282
+
+/home/harshney/Desktop/PC-LiquidGAN/venv/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:227: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn(
+[UNet|WARMUP    ] Ep [  1/100]  D:0.0000  G:0.0848  L1:0.0848  Phys:0.0000  Spec:0.0000  Time:34.3s
+[UNet|WARMUP    ] Ep [  2/100]  D:0.0000  G:0.0513  L1:0.0513  Phys:0.0000  Spec:0.0000  Time:34.1s
+[UNet|WARMUP    ] Ep [  3/100]  D:0.0000  G:0.0427  L1:0.0427  Phys:0.0000  Spec:0.0000  Time:34.0s
+[UNet|WARMUP    ] Ep [  4/100]  D:0.0000  G:0.0371  L1:0.0371  Phys:0.0000  Spec:0.0000  Time:34.0s
+[UNet|WARMUP    ] Ep [  5/100]  D:0.0000  G:0.0336  L1:0.0336  Phys:0.0000  Spec:0.0000  Time:34.0s
+[UNet|WARMUP    ] Ep [  6/100]  D:0.0000  G:0.0312  L1:0.0312  Phys:0.0000  Spec:0.0000  Time:34.0s
+[UNet|WARMUP    ] Ep [  7/100]  D:0.0000  G:0.0293  L1:0.0293  Phys:0.0000  Spec:0.0000  Time:34.0s
+[UNet|WARMUP    ] Ep [  8/100]  D:0.0000  G:0.0278  L1:0.0278  Phys:0.0000  Spec:0.0000  Time:34.0s
+[UNet|WARMUP    ] Ep [  9/100]  D:0.0000  G:0.0267  L1:0.0267  Phys:0.0000  Spec:0.0000  Time:34.0s
+[UNet|WARMUP    ] Ep [ 10/100]  D:0.0000  G:0.0255  L1:0.0255  Phys:0.0000  Spec:0.0000  Time:34.0s
+  → SSIM: 0.8654  PSNR: 34.06 dB  ← Best! Saved.
+[UNet|σ=0.080   ] Ep [ 11/100]  D:0.6938  G:1.9352  L1:0.0585  Phys:0.0047  Spec:0.0018  Time:110.3s
+[UNet|σ=0.078   ] Ep [ 12/100]  D:0.6903  G:1.8654  L1:0.0513  Phys:0.0045  Spec:0.0013  Time:110.2s
+[UNet|σ=0.076   ] Ep [ 13/100]  D:0.6892  G:1.8526  L1:0.0514  Phys:0.0051  Spec:0.0011  Time:110.3s
+[UNet|σ=0.074   ] Ep [ 14/100]  D:0.6848  G:1.8441  L1:0.0512  Phys:0.0051  Spec:0.0011  Time:110.3s
+[UNet|σ=0.072   ] Ep [ 15/100]  D:0.6866  G:1.8305  L1:0.0494  Phys:0.0050  Spec:0.0010  Time:110.4s
+[UNet|σ=0.070   ] Ep [ 16/100]  D:0.6890  G:1.8107  L1:0.0462  Phys:0.0048  Spec:0.0009  Time:110.4s
+[UNet|σ=0.068   ] Ep [ 17/100]  D:0.6888  G:1.7962  L1:0.0448  Phys:0.0048  Spec:0.0008  Time:110.4s
+[UNet|σ=0.066   ] Ep [ 18/100]  D:0.6886  G:1.7847  L1:0.0435  Phys:0.0047  Spec:0.0008  Time:110.3s
+[UNet|σ=0.064   ] Ep [ 19/100]  D:0.6884  G:1.7740  L1:0.0424  Phys:0.0046  Spec:0.0007  Time:110.4s
+[UNet|σ=0.062   ] Ep [ 20/100]  D:0.6884  G:1.7726  L1:0.0422  Phys:0.0046  Spec:0.0007  Time:110.1s
+  → SSIM: 0.8502  PSNR: 34.21 dB
+[UNet|σ=0.060   ] Ep [ 21/100]  D:0.6881  G:1.7680  L1:0.0421  Phys:0.0046  Spec:0.0007  Time:110.2s
+[UNet|σ=0.058   ] Ep [ 22/100]  D:0.6878  G:1.7657  L1:0.0417  Phys:0.0046  Spec:0.0007  Time:110.3s
+[UNet|σ=0.056   ] Ep [ 23/100]  D:0.6875  G:1.7513  L1:0.0404  Phys:0.0045  Spec:0.0006  Time:110.3s
+[UNet|σ=0.054   ] Ep [ 24/100]  D:0.6868  G:1.7508  L1:0.0407  Phys:0.0046  Spec:0.0006  Time:110.3s
+[UNet|σ=0.052   ] Ep [ 25/100]  D:0.6869  G:1.7480  L1:0.0404  Phys:0.0045  Spec:0.0006  Time:110.5s
+[UNet|σ=0.050   ] Ep [ 26/100]  D:0.6868  G:1.7427  L1:0.0398  Phys:0.0046  Spec:0.0006  Time:110.2s
+[UNet|σ=0.048   ] Ep [ 27/100]  D:0.6872  G:1.7365  L1:0.0394  Phys:0.0046  Spec:0.0006  Time:110.2s
+[UNet|σ=0.046   ] Ep [ 28/100]  D:0.6862  G:1.7373  L1:0.0395  Phys:0.0046  Spec:0.0006  Time:110.1s
+[UNet|σ=0.044   ] Ep [ 29/100]  D:0.6845  G:1.7271  L1:0.0395  Phys:0.0046  Spec:0.0006  Time:110.4s
+[UNet|σ=0.042   ] Ep [ 30/100]  D:0.6833  G:1.7051  L1:0.0386  Phys:0.0046  Spec:0.0005  Time:110.3s
+  → SSIM: 0.9022  PSNR: 36.19 dB  ← Best! Saved.
+[UNet|σ=0.040   ] Ep [ 31/100]  D:0.6812  G:1.6813  L1:0.0392  Phys:0.0047  Spec:0.0005  Time:110.2s
+[UNet|σ=0.038   ] Ep [ 32/100]  D:0.6760  G:1.6838  L1:0.0403  Phys:0.0048  Spec:0.0006  Time:110.2s
+[UNet|σ=0.036   ] Ep [ 33/100]  D:0.6753  G:1.6901  L1:0.0408  Phys:0.0048  Spec:0.0006  Time:110.3s
+[UNet|σ=0.034   ] Ep [ 34/100]  D:0.6756  G:1.6989  L1:0.0411  Phys:0.0049  Spec:0.0006  Time:110.4s
+[UNet|σ=0.032   ] Ep [ 35/100]  D:0.6756  G:1.7038  L1:0.0416  Phys:0.0050  Spec:0.0006  Time:110.4s
+[UNet|σ=0.030   ] Ep [ 36/100]  D:0.6707  G:1.6934  L1:0.0417  Phys:0.0050  Spec:0.0006  Time:110.4s
+[UNet|σ=0.028   ] Ep [ 37/100]  D:0.6682  G:1.6982  L1:0.0422  Phys:0.0051  Spec:0.0006  Time:110.3s
+[UNet|σ=0.026   ] Ep [ 38/100]  D:0.6642  G:1.7062  L1:0.0423  Phys:0.0051  Spec:0.0006  Time:110.5s
+[UNet|σ=0.024   ] Ep [ 39/100]  D:0.6683  G:1.7101  L1:0.0424  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.022   ] Ep [ 40/100]  D:0.6673  G:1.7056  L1:0.0422  Phys:0.0052  Spec:0.0006  Time:110.2s
+  → SSIM: 0.8997  PSNR: 35.26 dB
+[UNet|σ=0.020   ] Ep [ 41/100]  D:0.6627  G:1.7048  L1:0.0424  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.018   ] Ep [ 42/100]  D:0.6614  G:1.7104  L1:0.0422  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.016   ] Ep [ 43/100]  D:0.6560  G:1.7086  L1:0.0423  Phys:0.0052  Spec:0.0006  Time:110.4s
+[UNet|σ=0.014   ] Ep [ 44/100]  D:0.6546  G:1.7037  L1:0.0418  Phys:0.0052  Spec:0.0006  Time:110.4s
+[UNet|σ=0.012   ] Ep [ 45/100]  D:0.6402  G:1.7111  L1:0.0420  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.010   ] Ep [ 46/100]  D:0.6358  G:1.7135  L1:0.0417  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.008   ] Ep [ 47/100]  D:0.6390  G:1.7098  L1:0.0419  Phys:0.0053  Spec:0.0006  Time:110.3s
+[UNet|σ=0.006   ] Ep [ 48/100]  D:0.6324  G:1.7139  L1:0.0418  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.004   ] Ep [ 49/100]  D:0.6180  G:1.7197  L1:0.0414  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.002   ] Ep [ 50/100]  D:0.6215  G:1.7141  L1:0.0409  Phys:0.0051  Spec:0.0006  Time:110.3s
+  → SSIM: 0.9114  PSNR: 36.14 dB  ← Best! Saved.
+[UNet|σ=0.000   ] Ep [ 51/100]  D:0.6087  G:1.7267  L1:0.0406  Phys:0.0051  Spec:0.0006  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 52/100]  D:0.6140  G:1.7192  L1:0.0406  Phys:0.0051  Spec:0.0006  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 53/100]  D:0.6168  G:1.7126  L1:0.0406  Phys:0.0052  Spec:0.0006  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 54/100]  D:0.6194  G:1.7135  L1:0.0406  Phys:0.0052  Spec:0.0006  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 55/100]  D:0.6127  G:1.7185  L1:0.0402  Phys:0.0051  Spec:0.0006  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 56/100]  D:0.6180  G:1.7031  L1:0.0405  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 57/100]  D:0.6177  G:1.7063  L1:0.0405  Phys:0.0052  Spec:0.0006  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 58/100]  D:0.6317  G:1.6889  L1:0.0408  Phys:0.0053  Spec:0.0006  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 59/100]  D:0.6389  G:1.6795  L1:0.0406  Phys:0.0052  Spec:0.0006  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 60/100]  D:0.6499  G:1.6605  L1:0.0412  Phys:0.0053  Spec:0.0006  Time:110.3s
+  → SSIM: 0.9000  PSNR: 35.33 dB
+[UNet|σ=0.000   ] Ep [ 61/100]  D:0.6494  G:1.6733  L1:0.0406  Phys:0.0051  Spec:0.0006  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 62/100]  D:0.6593  G:1.6626  L1:0.0401  Phys:0.0051  Spec:0.0006  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 63/100]  D:0.6571  G:1.6733  L1:0.0399  Phys:0.0051  Spec:0.0006  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 64/100]  D:0.6618  G:1.6537  L1:0.0398  Phys:0.0050  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 65/100]  D:0.6639  G:1.6480  L1:0.0401  Phys:0.0051  Spec:0.0006  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 66/100]  D:0.6581  G:1.6553  L1:0.0394  Phys:0.0050  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 67/100]  D:0.6596  G:1.6815  L1:0.0393  Phys:0.0049  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 68/100]  D:0.6514  G:1.6746  L1:0.0390  Phys:0.0048  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 69/100]  D:0.6589  G:1.6698  L1:0.0394  Phys:0.0050  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 70/100]  D:0.6683  G:1.6740  L1:0.0392  Phys:0.0050  Spec:0.0005  Time:110.2s
+  → SSIM: 0.9233  PSNR: 36.64 dB  ← Best! Saved.
+[UNet|σ=0.000   ] Ep [ 71/100]  D:0.6677  G:1.6680  L1:0.0391  Phys:0.0050  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 72/100]  D:0.6677  G:1.6631  L1:0.0389  Phys:0.0049  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 73/100]  D:0.6669  G:1.6869  L1:0.0390  Phys:0.0050  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 74/100]  D:0.6722  G:1.6851  L1:0.0391  Phys:0.0050  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 75/100]  D:0.6740  G:1.6664  L1:0.0392  Phys:0.0050  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 76/100]  D:0.6733  G:1.6727  L1:0.0387  Phys:0.0049  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 77/100]  D:0.6730  G:1.7038  L1:0.0390  Phys:0.0050  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 78/100]  D:0.6743  G:1.6878  L1:0.0386  Phys:0.0049  Spec:0.0005  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 79/100]  D:0.6726  G:1.6980  L1:0.0382  Phys:0.0048  Spec:0.0005  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 80/100]  D:0.6763  G:1.6875  L1:0.0384  Phys:0.0049  Spec:0.0005  Time:110.2s
+  → SSIM: 0.9076  PSNR: 36.18 dB
+[UNet|σ=0.000   ] Ep [ 81/100]  D:0.6792  G:1.6981  L1:0.0389  Phys:0.0050  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 82/100]  D:0.6801  G:1.6938  L1:0.0388  Phys:0.0050  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 83/100]  D:0.6834  G:1.7109  L1:0.0389  Phys:0.0050  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 84/100]  D:0.6806  G:1.7096  L1:0.0384  Phys:0.0049  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 85/100]  D:0.6818  G:1.7135  L1:0.0385  Phys:0.0049  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 86/100]  D:0.6827  G:1.7178  L1:0.0381  Phys:0.0049  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 87/100]  D:0.6844  G:1.7151  L1:0.0384  Phys:0.0049  Spec:0.0005  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 88/100]  D:0.6839  G:1.7234  L1:0.0380  Phys:0.0049  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 89/100]  D:0.6834  G:1.7225  L1:0.0379  Phys:0.0048  Spec:0.0005  Time:110.2s
+[UNet|σ=0.000   ] Ep [ 90/100]  D:0.6843  G:1.7274  L1:0.0378  Phys:0.0048  Spec:0.0005  Time:110.2s
+  → SSIM: 0.9048  PSNR: 36.13 dB
+[UNet|σ=0.000   ] Ep [ 91/100]  D:0.6845  G:1.7258  L1:0.0377  Phys:0.0048  Spec:0.0005  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 92/100]  D:0.6836  G:1.7249  L1:0.0374  Phys:0.0048  Spec:0.0005  Time:110.3s
+[UNet|σ=0.000   ] Ep [ 93/100]  D:0.6843  G:1.7239  L1:0.0374  Phys:0.0048  Spec:0.0005  Time:110.0s
+[UNet|σ=0.000   ] Ep [ 94/100]  D:0.6846  G:1.7278  L1:0.0374  Phys:0.0048  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 95/100]  D:0.6842  G:1.7294  L1:0.0371  Phys:0.0047  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 96/100]  D:0.6842  G:1.7280  L1:0.0372  Phys:0.0048  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 97/100]  D:0.6840  G:1.7295  L1:0.0370  Phys:0.0047  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 98/100]  D:0.6843  G:1.7281  L1:0.0370  Phys:0.0047  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [ 99/100]  D:0.6841  G:1.7285  L1:0.0369  Phys:0.0047  Spec:0.0005  Time:110.1s
+[UNet|σ=0.000   ] Ep [100/100]  D:0.6839  G:1.7262  L1:0.0369  Phys:0.0047  Spec:0.0005  Time:110.1s
+  → SSIM: 0.9351  PSNR: 37.87 dB  ← Best! Saved.
+
+Best SSIM: 0.9351
+Done! UNet training complete for KAIST
+================================================================
+ All domains successfully trained with ODE-UNet!
+ The new checkpoints are in ./checkpoints_unet/
+================================================================
