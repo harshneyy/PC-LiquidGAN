@@ -43,7 +43,17 @@
     \end{enumerate}
 \end{frame}
 
-\begin{frame}{3. Final Quantitative Results (5 Distinct Domains)}
+\begin{frame}{3. PC-LiquidGAN ODE-UNet Architecture}
+    \textbf{Continuous-time latent dynamics directly mapped across spatial features.}
+    \vspace{0.2cm}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.85\textwidth]{architecture.png}
+        \caption{The Proposed ODE-UNet Generator Architecture with adaptive solver integration.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{4. Final Quantitative Results (5 Distinct Domains)}
     \textbf{Metric: Structural Similarity Index (SSIM) \& PSNR}
     \vspace{0.3cm}
     \begin{table}
@@ -64,45 +74,29 @@
     \textit{*Note: 0.99+ SSIM indicates near-perfect, pixel-accurate physically-constrained thermal synthesis, effectively solving the data scarcity issue for these domains.}
 \end{frame}
 
-\begin{frame}{4. Ablation \& Comparative Model Analysis}
+\begin{frame}{5. Ablation \& Comparative Model Analysis}
     \textbf{Evaluating against baselines on the challenging Agri (Tomato) Dataset:}
     \vspace{0.2cm}
-    \begin{table}
-        \centering
-        \resizebox{\textwidth}{!}{
-        \begin{tabular}{l|ccc|c}
-        \toprule
-        \textbf{Model Structure} & \textbf{NeuralODE} & \textbf{Physics Constraint} & \textbf{FFT Spectral Loss} & \textbf{SSIM} \\
-        \midrule
-        Standard WGAN-GP         & $\times$ & $\times$ & $\times$ & 0.1398 \\
-        Standard DCGAN           & $\times$ & $\times$ & $\times$ & 0.5945 \\
-        Base LiquidGAN           & \checkmark & $\times$ & $\times$ & 0.8222 \\
-        \midrule
-        PC-LiquidGAN (Physics only) & \checkmark & \checkmark & $\times$ & 0.7821 \\
-        PC-LiquidGAN (+ Spectral)   & \checkmark & \checkmark & \checkmark & 0.8290 \\
-        \textbf{PC-LiquidGAN (ODE-UNet)} & \checkmark & \checkmark & \checkmark & \textbf{0.9945} \\
-        \bottomrule
-        \end{tabular}}
-    \end{table}
-    \vspace{0.2cm}
-    The structural limitation was the generator architecture. Integrating continuous ODE dynamics with UNet skip connections yielded a massive +16\% SSIM leap.
-\end{frame}
-
-\begin{frame}{5. Visual Quality Comparison: Solving Spatial Blurring}
-    \textbf{Impact of the ODE-UNet Generator Upgrade:}
-    \vspace{0.2cm}
-    
-    %(You will need to run python and save an image grid to 'comparison_grid.png' to compile this locally)
     \begin{figure}
         \centering
-        % Un-comment the line below when compiling via Overleaf after uploading the images.
-        % \includegraphics[width=0.8\textwidth]{comparison_grid.png} 
-        \vspace{3cm} 
-        \caption{Left: Ground Truth | Center: Base LiquidGAN (Severe Blur) | Right: Proposed ODE-UNet (Perfect Fidelity)}
+        \includegraphics[height=0.55\textheight]{results_graph.png}
+    \end{figure}
+    \vspace{0.2cm}
+    The structural limitation was the generator architecture. Integrating continuous ODE dynamics with UNet skip connections yielded a massive +16\% SSIM leap over base baselines.
+\end{frame}
+
+\begin{frame}{6. Visual Quality Comparison: Cross-Domain Synthesis}
+    \textbf{Input (Left) $\rightarrow$ Ground Truth Thermal (Center) $\rightarrow$ PC-LiquidGAN Output (Right)}
+    \vspace{0.2cm}
+    
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.62\textheight]{qualitative_grid.png} 
+        \caption{Demonstrating perfect thermal synthesis across Medical, Biometric, \& Agri domains.}
     \end{figure}
 \end{frame}
 
-\begin{frame}{6. Zero-Shot Thermodynamics Generalization}
+\begin{frame}{7. Zero-Shot Thermodynamics Generalization}
     \textbf{Does the model actually learn physics, or just memorize texture?}
     \vspace{0.3cm}
     \begin{itemize}
@@ -113,7 +107,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{7. Conclusion \& Future Work}
+\begin{frame}{8. Conclusion \& Future Work}
     \textbf{Conclusions:}
     \begin{itemize}
         \item By enforcing the thermal continuity equation and correcting spatial feature crush via ODE-UNet, we achieved state-of-the-art highly-accurate cross-domain thermal synthesis.
