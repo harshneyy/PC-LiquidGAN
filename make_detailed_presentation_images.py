@@ -4,6 +4,8 @@ from PIL import Image
 import numpy as np
 import os
 
+plt.style.use('dark_background')
+
 def create_ablation_graph():
     models = ['WGAN-GP', 'DCGAN', 'LiquidGAN\n(Base)', 'Physics\nOnly', '+Spectral', 'ODE-UNet\n(Ours)']
     ssim = [0.1398, 0.5945, 0.8222, 0.7821, 0.8290, 0.9945]
@@ -20,7 +22,7 @@ def create_ablation_graph():
         ax.text(bar.get_x() + bar.get_width()/2, yval + 0.02, f'{yval:.4f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
     
     plt.tight_layout()
-    plt.savefig('results_ablation.png', dpi=300)
+    plt.savefig('results_ablation.png', dpi=300, transparent=True)
     plt.close()
     print("Created results_ablation.png")
 
@@ -58,9 +60,9 @@ def create_all_models_graph():
         ax1.text(bar.get_x() + bar.get_width()/2, yval + 0.02, f'{yval:.4f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold')
     for bar in bars2:
         yval = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval:.2f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold')
+        ax2.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval:.2f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold', color='white')
 
-    plt.savefig('results_all_models.png', dpi=300, bbox_inches='tight')
+    plt.savefig('results_all_models.png', dpi=300, bbox_inches='tight', transparent=True)
     plt.close()
     print("Created results_all_models.png")
 
@@ -180,9 +182,9 @@ def create_detailed_architecture():
 
     ax.set_ylim(-0.35, 1.0)
     ax.set_xlim(-0.1, 1.4)
-    plt.title('Detailed PC-LiquidGAN (ODE-UNet) Architecture', fontsize=18, fontweight='bold', y=0.95)
+    plt.title('Detailed PC-LiquidGAN (ODE-UNet) Architecture', fontsize=18, fontweight='bold', y=0.95, color='white')
     plt.tight_layout()
-    plt.savefig('detailed_architecture.png', dpi=300, bbox_inches='tight')
+    plt.savefig('detailed_architecture.png', dpi=300, bbox_inches='tight', transparent=True)
     plt.close()
     print("Created detailed_architecture.png")
 

@@ -1,6 +1,21 @@
 \documentclass[aspectratio=169]{beamer}
 \usetheme{Madrid}
 \usecolortheme{default}
+\usepackage{xcolor}
+
+% --- Custom Dark Theme ---
+\definecolor{MyDarkBlue}{RGB}{20, 25, 35}
+\definecolor{MyTextWhite}{RGB}{240, 240, 240}
+\definecolor{MyCyan}{RGB}{0, 200, 255}
+
+\setbeamercolor{normal text}{fg=MyTextWhite,bg=MyDarkBlue}
+\setbeamercolor{structure}{fg=MyCyan}
+\setbeamercolor{title}{fg=MyTextWhite,bg=MyDarkBlue}
+\setbeamercolor{frametitle}{fg=MyTextWhite,bg=MyDarkBlue}
+\setbeamercolor{item}{fg=MyCyan}
+\setbeamercolor{block title}{bg=MyDarkBlue,fg=MyTextWhite}
+\setbeamercolor{block body}{bg=black,fg=MyTextWhite}
+
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{caption}
