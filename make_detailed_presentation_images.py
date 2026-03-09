@@ -64,6 +64,43 @@ def create_all_models_graph():
     plt.close()
     print("Created results_all_models.png")
 
+def create_qualitative_grid():
+    datasets = ['medical', 'cbsr', 'agri', 'chilli', 'kaist']
+    rows = []
+    
+    for ds in datasets:
+        img_path = f'results_unet/{ds}/epoch_0100.png'
+        if os.path.exists(img_path):
+            img = Image.open(img_path)
+            w, h = img.size
+            row_h = h // 2
+            col_w = w // 4
+            
+            # Crop Input, GT, Fake
+            inp = img.crop((0, 0, col_w, row_h))
+            gt = img.crop((col_w, 0, col_w*2, row_h))
+            fake = img.crop((col_w*2, 0, col_w*3, row_h))
+            
+            # Concatenate horizontally
+            row_img = Image.new('RGB', (col_w * 3, row_h))
+            row_img.paste(inp, (0, 0))
+            row_img.paste(gt, (col_w, 0))
+            row_img.paste(fake, (col_w*2, 0))
+            rows.append(row_img)
+    
+    if rows:
+        grid_w = rows[0].width
+        grid_h = sum(r.height for r in rows)
+        grid_img = Image.new('RGB', (grid_w, grid_h))
+        
+        y_offset = 0
+        for r in rows:
+            grid_img.paste(r, (0, y_offset))
+            y_offset += r.height
+            
+        grid_img.save('qualitative_grid.png')
+        print("Created qualitative_grid.png")
+
 def create_detailed_architecture():
     fig, ax = plt.subplots(figsize=(14, 7))
     ax.axis('off')
@@ -146,5 +183,6 @@ def create_detailed_architecture():
 if __name__ == '__main__':
     create_ablation_graph()
     create_all_models_graph()
+    create_qualitative_grid()
     create_detailed_architecture()
 
