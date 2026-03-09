@@ -1,0 +1,150 @@
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from PIL import Image
+import numpy as np
+import os
+
+def create_ablation_graph():
+    models = ['WGAN-GP', 'DCGAN', 'LiquidGAN\n(Base)', 'Physics\nOnly', '+Spectral', 'ODE-UNet\n(Ours)']
+    ssim = [0.1398, 0.5945, 0.8222, 0.7821, 0.8290, 0.9945]
+    colors = ['#ff9999', '#ffcc99', '#ffff99', '#c2c2f0', '#99ff99', '#ffb3e6']
+    
+    fig, ax = plt.subplots(figsize=(10, 5))
+    bars = ax.bar(models, ssim, color=colors, edgecolor='black', linewidth=1.5)
+    ax.set_ylim(0, 1.1)
+    ax.set_ylabel('SSIM Score', fontsize=12, fontweight='bold')
+    ax.set_title('Ablation Study: Progressive Improvements on Agri (Tomato)', fontsize=14, fontweight='bold')
+    
+    for bar in bars:
+        yval = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2, yval + 0.02, f'{yval:.4f}', ha='center', va='bottom', fontsize=10, fontweight='bold')
+    
+    plt.tight_layout()
+    plt.savefig('results_ablation.png', dpi=300)
+    plt.close()
+    print("Created results_ablation.png")
+
+def create_all_models_graph():
+    labels = ['KAIST\n(Surv.)', 'Medical\n(Knee IR)', 'Agri\n(Tomato)', 'Agri\n(Chilli)', 'CBSR\n(Face)']
+    ssim = [0.9351, 0.9631, 0.9945, 0.9947, 0.9976]
+    psnr = [37.87, 41.22, 50.30, 50.84, 52.23]
+    
+    x = np.arange(len(labels))
+    width = 0.35
+    
+    fig, ax1 = plt.subplots(figsize=(10, 5))
+    
+    color = 'tab:blue'
+    ax1.set_ylabel('SSIM', color=color, fontweight='bold', fontsize=12)
+    bars1 = ax1.bar(x - width/2, ssim, width, label='SSIM', color=color, edgecolor='black')
+    ax1.tick_params(axis='y', labelcolor=color)
+    ax1.set_ylim(0, 1.2)
+    
+    ax2 = ax1.twinx()  
+    color = 'tab:red'
+    ax2.set_ylabel('PSNR (dB)', color=color, fontweight='bold', fontsize=12)  
+    bars2 = ax2.bar(x + width/2, psnr, width, label='PSNR', color=color, edgecolor='black')
+    ax2.tick_params(axis='y', labelcolor=color)
+    ax2.set_ylim(10, 60)
+    
+    fig.tight_layout()  
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(labels, fontweight='bold', fontsize=11)
+    plt.title('Final PC-LiquidGAN Performance Across 5 Domains', fontsize=15, fontweight='bold')
+    
+    # Add values on top of bars
+    for bar in bars1:
+        yval = bar.get_height()
+        ax1.text(bar.get_x() + bar.get_width()/2, yval + 0.02, f'{yval:.4f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold')
+    for bar in bars2:
+        yval = bar.get_height()
+        ax2.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval:.2f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold')
+
+    plt.savefig('results_all_models.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print("Created results_all_models.png")
+
+def create_detailed_architecture():
+    fig, ax = plt.subplots(figsize=(14, 7))
+    ax.axis('off')
+    
+    # Draw UNet Blocks
+    # Encoder
+    blocks_enc_x = [0.1, 0.25, 0.4, 0.55]
+    blocks_enc_y = [0.7, 0.5, 0.3, 0.1]
+    blocks_enc_h = [0.2, 0.15, 0.1, 0.05]
+    blocks_enc_w = 0.08
+    
+    # Decoder
+    blocks_dec_x = [1.1, 0.95, 0.8, 0.65] # reverse order
+    blocks_dec_y = [0.7, 0.5, 0.3, 0.1]
+    
+    for i in range(4):
+        # Encoder box
+        ax.add_patch(patches.Rectangle((blocks_enc_x[i], blocks_enc_y[i]), blocks_enc_w, blocks_enc_h[i], fill=True, color='skyblue', ec='black'))
+        ax.text(blocks_enc_x[i] + blocks_enc_w/2, blocks_enc_y[i] + blocks_enc_h[i]/2, f'Conv\nBlock {i+1}', ha='center', va='center', fontsize=9, rotation=90, fontweight='bold')
+        
+        # Decoder box (align with encoder)
+        ax.add_patch(patches.Rectangle((blocks_dec_x[i], blocks_dec_y[i]), blocks_enc_w, blocks_enc_h[i], fill=True, color='lightgreen', ec='black'))
+        ax.text(blocks_dec_x[i] + blocks_enc_w/2, blocks_dec_y[i] + blocks_enc_h[i]/2, f'UpConv\nBlock {i+1}', ha='center', va='center', fontsize=9, rotation=90, fontweight='bold')
+        
+        # Draw Skip Connections
+        if i < 3: # Skip connection
+            ax.annotate('', xy=(blocks_dec_x[i], blocks_dec_y[i] + blocks_enc_h[i]/2), xytext=(blocks_enc_x[i] + blocks_enc_w, blocks_enc_y[i] + blocks_enc_h[i]/2),
+                        arrowprops=dict(facecolor='gray', linestyle='dashed', edgecolor='gray', shrink=0.0, width=1, headwidth=5))
+            ax.text((blocks_enc_x[i] + blocks_enc_w + blocks_dec_x[i])/2, blocks_dec_y[i] + blocks_enc_h[i]/2 + 0.02, 'Concat Skip Connection', ha='center', va='bottom', fontsize=9, color='darkred', fontweight='bold')
+            
+        # Draw downsampling arrows
+        if i < 3:
+            ax.annotate('', xy=(blocks_enc_x[i+1], blocks_enc_y[i+1] + blocks_enc_h[i+1]/2), xytext=(blocks_enc_x[i] + blocks_enc_w/2, blocks_enc_y[i]),
+                        arrowprops=dict(facecolor='red', shrink=0.0, width=1.5, headwidth=6), va='top')
+            ax.text(blocks_enc_x[i] + blocks_enc_w, blocks_enc_y[i] - 0.05, 'Downsample', fontsize=9, color='red', fontweight='bold')
+            
+            # Draw upsampling arrows
+            ax.annotate('', xy=(blocks_dec_x[i] + blocks_enc_w/2, blocks_dec_y[i]), xytext=(blocks_dec_x[i+1], blocks_dec_y[i+1] + blocks_enc_h[i+1]/2),
+                        arrowprops=dict(facecolor='green', shrink=0.0, width=1.5, headwidth=6))
+            ax.text(blocks_dec_x[i+1] - 0.04, blocks_dec_y[i] - 0.05, 'Upsample', fontsize=9, color='green', fontweight='bold')
+            
+    # Bottleneck and ConvODEFunc
+    ax.add_patch(patches.Rectangle((0.53, -0.1), 0.12, 0.15, fill=True, color='orange', ec='black'))
+    ax.text(0.53 + 0.06, -0.025, 'Spatial\nConvODEFunc\n(dopri5 adaptive)', ha='center', va='center', fontsize=10, fontweight='bold')
+    
+    # Connect encoder to ODE
+    ax.annotate('', xy=(0.55, -0.025), xytext=(blocks_enc_x[3] + blocks_enc_w/2, blocks_enc_y[3]),
+                arrowprops=dict(facecolor='black', shrink=0.0, width=2, headwidth=7))
+    
+    # Connect ODE to decoder
+    ax.annotate('', xy=(blocks_dec_x[3], blocks_dec_y[3] + blocks_enc_h[3]/2), xytext=(0.53 + 0.12, -0.025),
+                arrowprops=dict(facecolor='black', shrink=0.0, width=2, headwidth=7))
+
+    # Inputs and Outputs
+    ax.text(-0.02, 0.8, 'Input Image\n(RGB / NIR)', ha='center', va='center', fontweight='bold', fontsize=12)
+    ax.annotate('', xy=(blocks_enc_x[0], blocks_enc_y[0] + blocks_enc_h[0]/2), xytext=(-0.02, 0.7), arrowprops=dict(facecolor='black', shrink=0.0, width=3, headwidth=10))
+    
+    ax.text(1.28, 0.8, 'Generated\nThermal Image', ha='center', va='center', fontweight='bold', fontsize=12)
+    ax.annotate('', xy=(1.28, 0.7), xytext=(blocks_dec_x[0] + blocks_enc_w, blocks_dec_y[0] + blocks_enc_h[0]/2), arrowprops=dict(facecolor='black', shrink=0.0, width=3, headwidth=10))
+    
+    # Discriminator / Losses
+    ax.add_patch(patches.Rectangle((1.05, -0.15), 0.22, 0.18, fill=True, color='pink', ec='black'))
+    ax.text(1.16, -0.06, 'Liquid Neural Network\n(LNN Discriminator)', ha='center', va='center', fontsize=10, fontweight='bold')
+    
+    ax.annotate('Adversarial\nFeedback', xy=(1.16, 0.03), xytext=(1.28, 0.65), arrowprops=dict(facecolor='black', linestyle='dashed', shrink=0.0, width=1, headwidth=5), ha='center', va='center')
+    
+    # Physics and Spectral loss indicators
+    ax.text(0.8, -0.22, 'Physics-Constrained Loss ($L_{flux}$, $L_{energy}$)\nEnforces Heat Diffusion $\partial T / \partial t = \\alpha \\nabla^2 T$', ha='center', va='center', fontsize=12, fontweight='bold', bbox=dict(boxstyle="round,pad=0.3", fc="yellow", ec="b", lw=2))
+    ax.text(0.25, -0.22, 'FFT Spectral Loss ($L_{freq}$)\nEnforces Low-Frequency Gaussian Spectrum', ha='center', va='center', fontsize=11, fontweight='bold', bbox=dict(boxstyle="round,pad=0.3", fc="cyan", ec="b", lw=2))
+
+    ax.set_ylim(-0.35, 1.0)
+    ax.set_xlim(-0.1, 1.4)
+    plt.title('Detailed PC-LiquidGAN (ODE-UNet) Architecture', fontsize=18, fontweight='bold', y=0.95)
+    plt.tight_layout()
+    plt.savefig('detailed_architecture.png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print("Created detailed_architecture.png")
+
+
+if __name__ == '__main__':
+    create_ablation_graph()
+    create_all_models_graph()
+    create_detailed_architecture()
+

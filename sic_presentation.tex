@@ -48,30 +48,20 @@
     \vspace{0.2cm}
     \begin{figure}
         \centering
-        \includegraphics[width=0.85\textwidth]{architecture.png}
-        \caption{The Proposed ODE-UNet Generator Architecture with adaptive solver integration.}
+        \includegraphics[width=0.95\textwidth]{detailed_architecture.png}
+        \caption{The Proposed ODE-UNet Generator Architecture with adaptive solver integration and continuous dynamics.}
     \end{figure}
 \end{frame}
 
 \begin{frame}{4. Final Quantitative Results (5 Distinct Domains)}
     \textbf{Metric: Structural Similarity Index (SSIM) \& PSNR}
     \vspace{0.3cm}
-    \begin{table}
+    \begin{figure}
         \centering
-        \begin{tabular}{llcc}
-        \toprule
-        \textbf{Dataset} & \textbf{Domain} & \textbf{SSIM} & \textbf{PSNR (dB)} \\
-        \midrule
-        CBSR (NIR Face)      & Biometrics         & \textbf{0.9976} & \textbf{52.23} \\
-        Agri (Chilli Pepper) & Agriculture        & \textbf{0.9947} & \textbf{50.84} \\
-        Agri (Tomato Leaf)   & Agriculture        & \textbf{0.9945} & \textbf{50.30} \\
-        Medical (Knee IR)    & Healthcare         & \textbf{0.9631} & \textbf{41.22} \\
-        KAIST (Surveillance) & Autonomous Sensing & \textbf{0.9351} & \textbf{37.87} \\
-        \bottomrule
-        \end{tabular}
-    \end{table}
+        \includegraphics[height=0.6\textheight]{results_all_models.png}
+    \end{figure}
     \vspace{0.2cm}
-    \textit{*Note: 0.99+ SSIM indicates near-perfect, pixel-accurate physically-constrained thermal synthesis, effectively solving the data scarcity issue for these domains.}
+    \textit{*Note: 0.99+ SSIM indicates near-perfect, pixel-accurate physically-constrained thermal synthesis, effectively solving data scarcity for these domains.}
 \end{frame}
 
 \begin{frame}{5. Ablation \& Comparative Model Analysis}
@@ -79,7 +69,7 @@
     \vspace{0.2cm}
     \begin{figure}
         \centering
-        \includegraphics[height=0.55\textheight]{results_graph.png}
+        \includegraphics[height=0.55\textheight]{results_ablation.png}
     \end{figure}
     \vspace{0.2cm}
     The structural limitation was the generator architecture. Integrating continuous ODE dynamics with UNet skip connections yielded a massive +16\% SSIM leap over base baselines.
