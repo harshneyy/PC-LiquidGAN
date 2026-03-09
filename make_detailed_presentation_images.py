@@ -73,13 +73,22 @@ def create_qualitative_grid():
         if os.path.exists(img_path):
             img = Image.open(img_path)
             w, h = img.size
-            row_h = h // 2
+            # The checkpoint grid is arranged with 4 columns:
+            # Col 0: Input (RGB)
+            # Col 1: Ground Truth (Thermal)
+            # Col 2: Fake Generation (G(RGB))
+            # Col 3: Post-Processed Fake (CLAHE etc)
+            #
+            # The grid has multiple rows (batch size). We just want the FIRST row (Index 0).
+            # Let's say there are 8 rows. 
+            num_rows_in_img = 8 # Defaults from training script typically
+            row_h = h // num_rows_in_img
             col_w = w // 4
             
-            # Crop Input, GT, Fake
-            inp = img.crop((0, 0, col_w, row_h))
-            gt = img.crop((col_w, 0, col_w*2, row_h))
-            fake = img.crop((col_w*2, 0, col_w*3, row_h))
+            # Crop the very first row (top of the image) for Input, GT, Fake
+            inp = img.crop((0,           0, col_w,       row_h))
+            gt = img.crop((col_w,        0, col_w * 2,   row_h))
+            fake = img.crop((col_w * 2,  0, col_w * 3,   row_h))
             
             # Concatenate horizontally
             row_img = Image.new('RGB', (col_w * 3, row_h))
