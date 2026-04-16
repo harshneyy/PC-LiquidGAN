@@ -1,0 +1,71 @@
+\chapter{Dataset Details and Preprocessing}
+\label{AppendixB}
+\lhead{Appendix B. \emph{Dataset Details and Preprocessing}}
+
+\section{KAIST Multispectral Pedestrian Dataset}
+
+The KAIST Multispectral Pedestrian Dataset~\cite{b_kaist} is a large-scale benchmark for multi-spectral pedestrian detection collected from an urban driving environment in South Korea. It contains over 95,000 colour-thermal image pairs captured under various illumination conditions (daytime, nighttime, dusk). The RGB and LWIR thermal cameras are calibrated and temporally synchronised.
+
+\begin{itemize}
+    \item \textbf{Original size:} $640 \times 480$ pixels
+    \item \textbf{Preprocessed size:} $256 \times 256$ pixels (centre crop + resize)
+    \item \textbf{Training pairs used:} 4,500 (stratified sample of 2,250 daytime + 2,250 nighttime)
+    \item \textbf{Domain challenge:} High scene variability (>10 object categories), day/night illumination change, complex occlusion
+\end{itemize}
+
+\section{CBSR NIR Face Database}
+
+The CBSR NIR Face Database provides near-infrared (NIR, 850 nm) and visible light face images. We treat NIR as proxy for thermal face imaging, as NIR-to-thermal mapping shares the cross-modal translation challenge (both are non-visible radiation domains).
+
+\begin{itemize}
+    \item \textbf{Modalities:} Near-infrared face $\to$ thermal face portrait
+    \item \textbf{Preprocessed size:} $256 \times 256$ pixels (face-aligned crop)
+    \item \textbf{Training pairs used:} 2,700
+    \item \textbf{Domain challenge:} Subtle inter-subject thermal variation; consistent scene structure makes this the ``easiest'' domain
+\end{itemize}
+
+\section{Medical Knee Infrared Dataset}
+
+The medical dataset consists of paired knee X-ray images and corresponding infrared thermography heatmaps indicating inflammation severity. This is a true cross-modal task: the input (X-ray) and target (pseudo-thermal heatmap) are fundamentally different imaging modalities.
+
+\begin{itemize}
+    \item \textbf{Modalities:} X-ray image $\to$ inflammation thermal heatmap
+    \item \textbf{Preprocessed size:} $256 \times 256$ pixels
+    \item \textbf{Training pairs used:} 4,500
+    \item \textbf{Domain challenge:} X-ray and IR are physically unrelated modalities; the GAN must learn a highly non-trivial cross-modal mapping
+\end{itemize}
+
+\section{Agricultural Disease Datasets}
+
+Two plant disease datasets from Kaggle were used, providing RGB leaf images with corresponding disease stress thermal maps.
+
+\subsection{Tomato Leaf Disease}
+\begin{itemize}
+    \item \textbf{Modalities:} RGB tomato leaf $\to$ thermal vegetation stress map
+    \item \textbf{Training pairs:} 663 (smallest dataset used)
+    \item \textbf{Challenge:} Severe data scarcity; fine-grained disease hotspot boundaries
+    \item \textbf{Disease classes:} Early blight, late blight, bacterial spot, healthy
+\end{itemize}
+
+\subsection{Chilli Pepper Disease}
+\begin{itemize}
+    \item \textbf{Modalities:} RGB bell/chilli pepper leaf $\to$ thermal disease footprint
+    \item \textbf{Training pairs:} 2,227
+    \item \textbf{Challenge:} Cross-class leaf shape variation; overlapping disease thermal signatures
+    \item \textbf{Disease classes:} Bacterial spot, healthy
+\end{itemize}
+
+\section{Preprocessing Pipeline}
+
+All datasets are preprocessed using the following standard pipeline:
+
+\begin{enumerate}
+    \item \textbf{Resize:} Bicubic interpolation to $256 \times 256$ pixels
+    \item \textbf{Normalise RGB:} $[0, 255] \to [-1, 1]$ via $(x/127.5) - 1$
+    \item \textbf{Normalise Thermal:} $[0, 255] \to [-1, 1]$ via $(y/127.5) - 1$
+    \item \textbf{Thermal to Grayscale:} If multi-channel, convert using $y = 0.299R + 0.587G + 0.114B$ (luminance)
+    \item \textbf{Train/Test Split:} 85\%/15\% random split, stratified where class labels available
+    \item \textbf{Augmentation (training only):} Random horizontal flip ($p=0.5$)
+\end{enumerate}
+
+The preprocessing is implemented in \texttt{utils/dataset.py} using the \texttt{ThermalDataset} class, which inherits from \texttt{torch.utils.data.Dataset}.

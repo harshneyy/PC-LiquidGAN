@@ -1,0 +1,104 @@
+\chapter{Hyperparameter Configuration}
+\label{AppendixA}
+\lhead{Appendix A. \emph{Hyperparameter Configuration}}
+
+This appendix provides the complete listing of hyperparameters used for training PC-LiquidGAN, supplementing Table~\ref{tab:hyperparams} in Chapter~\ref{Chapter4}.
+
+\section{Model Architecture Hyperparameters}
+
+\begin{table}[htbp]
+\centering
+\caption{Generator (ODE-UNet) architecture parameters.}
+\label{tab:app_gen}
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\midrule
+Input channels & 3 & RGB input \\
+Output channels & 1 & Grayscale thermal \\
+Encoder channels & [64, 128, 256, 512] & Progressive channel expansion \\
+Bottleneck out channels & 64 & Spatial ConvODE feature depth \\
+ConvODE kernel size & $3 \times 3$ & Spatial derivative parameterisation \\
+ConvODE activation & SiLU & Smooth activation for ODE dynamics \\
+ODE integration interval & [0, 1] & Normalised time domain \\
+ODE solver & dopri5 & Dormand-Prince adaptive solver \\
+ODE rtol & $10^{-3}$ & Relative tolerance \\
+ODE atol & $10^{-3}$ & Absolute tolerance \\
+Decoder upsampler & TransposedConv $4\times4$, stride 2 & Bilinear-like upsampling \\
+Output activation & $\tanh$ & Maps to $[-1, 1]$ range \\
+Total parameters & $\approx$13.8M & Including ConvODE \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Discriminator (LNN) architecture parameters.}
+\label{tab:app_disc}
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Description} \\
+\midrule
+Input channels & 1 & Thermal image (real or generated) \\
+CNN channels & [64, 128, 256, 512] & Progressive feature extraction \\
+CNN activation & LeakyReLU(0.2) & Standard GAN discriminator activation \\
+Pooled feature dim & 8192 & After $4\times4$ adaptive avg pool + flatten \\
+LiquidCell hidden dim & 256 & Per-neuron hidden state size \\
+LiquidCell num steps & 6 & Euler integration steps \\
+$\tau$ initialisation & 1.0 & Per-neuron learnable time constant \\
+Classifier layers & FC 256$\to$64$\to$1 & MLP head \\
+Output activation & Sigmoid & Real/fake probability \\
+Total parameters & $\approx$4.9M & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Training Hyperparameters}
+
+\begin{table}[htbp]
+\centering
+\caption{Full training hyperparameter listing.}
+\label{tab:app_train}
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{Value} & \textbf{Notes} \\
+\midrule
+Image size & $256 \times 256$ & \\
+Batch size & 16 & Reduced from 32 for dopri5 memory overhead \\
+Total epochs & 100 & \\
+Warmup epochs & 10 & L1-only, no adversarial \\
+$\text{LR}_G$ & $2 \times 10^{-4}$ & Cosine annealed \\
+$\text{LR}_D$ & $1 \times 10^{-4}$ & Cosine annealed \\
+$\beta_1$ (Adam) & 0.5 & \\
+$\beta_2$ (Adam) & 0.999 & \\
+G:D update ratio & 2:1 & \\
+Gradient clip norm & 1.0 & Applied to both G and D \\
+Label smoothing (real) & 0.9 & \\
+Label smoothing (fake) & 0.05 & \\
+Instance noise $\sigma$ & $0.1 \to 0$ & Linear decay over 50 epochs \\
+Checkpoint interval & Every 10 epochs & Best SSIM checkpoint saved separately \\
+\midrule
+$\lambda_{adv}$ & 1.0 & Adversarial loss weight \\
+$\lambda_{L1}$ & 10.0 & L1 reconstruction weight \\
+$\lambda_{physics}$ & 0.1 & Physics loss multiplier \\
+$\lambda_{spec}$ & 0.05 & Spectral loss multiplier \\
+$\lambda_{flux}$ & 0.5 & Inside $\mathcal{L}_{physics}$ \\
+$\lambda_{energy}$ & 0.25 & Inside $\mathcal{L}_{physics}$ \\
+$\lambda_{smooth}$ & 0.1 & Inside $\mathcal{L}_{physics}$ \\
+$\alpha$ (diffusivity) & 0.001 & Thermal diffusivity constant \\
+$\sigma_{FFT}$ & 32 & Gaussian mask sigma (pixels) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Fine-Tuning Configuration (KAIST)}
+
+Following the main 100-epoch training, the KAIST model was fine-tuned for an additional 50 epochs with the following modified settings:
+
+\begin{itemize}
+    \item $\text{LR}_G = 2 \times 10^{-5}$, $\text{LR}_D = 5 \times 10^{-6}$ (10$\times$ lower than training)
+    \item Stronger augmentation: random horizontal flip, $90^\circ$ rotation, colour jitter ($\pm0.1$)
+    \item Cosine annealing warm restart with $T_0 = 10$ epochs
+    \item Best checkpoint saved only when SSIM strictly exceeds the pre-fine-tuning best (0.9351 SSIM)
+    \item Fine-tuning did not surpass the original best checkpoint on KAIST; pre-fine-tuning model was retained.
+\end{itemize}

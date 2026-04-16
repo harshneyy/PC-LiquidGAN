@@ -1,0 +1,134 @@
+\chapter{Key Implementation Details}
+\label{AppendixC}
+\lhead{Appendix C. \emph{Key Implementation Details}}
+
+\section{Project Structure}
+
+\begin{verbatim}
+PC-LiquidGAN/
+├── models/
+│   ├── generator.py         # NeuralODEGenerator (V1) + ODEUNetGenerator (V2)
+│   └── discriminator.py     # LiquidDiscriminator with LiquidCell
+├── losses/
+│   ├── physics_loss.py      # Heat diffusion PDE + energy conservation
+│   └── spectral_loss.py     # FFT spectral loss with Gaussian mask
+├── utils/
+│   ├── dataset.py           # ThermalDataset (PyTorch Dataset class)
+│   └── metrics.py           # SSIM and PSNR computation
+├── train_unet.py            # Main ODE-UNet training script (full model)
+├── train_ablation.py        # Baseline training (no physics, no spectral)
+├── train_physics.py         # Physics-only ablation training
+├── train_spectral.py        # Physics + spectral ablation training
+├── finetune_kaist.py        # KAIST fine-tuning script
+├── run_ablation_all.sh      # Full ablation runner (all 4 datasets)
+├── demo.py                  # Gradio interactive demo
+├── config.py                # Centralised hyperparameter configuration
+└── checkpoints_unet/        # Best model checkpoints per dataset
+    ├── kaist/best.pth
+    ├── cbsr/best.pth
+    ├── medical/best.pth
+    ├── agri/best.pth
+    └── chilli/best.pth
+\end{verbatim}
+
+\section{Physics Loss Implementation}
+
+The physics loss module (\texttt{losses/physics\_loss.py}) computes the heat diffusion residual using depthwise convolution:
+
+\begin{verbatim}
+class PhysicsLoss(nn.Module):
+    def __init__(self, alpha=0.001):
+        super().__init__()
+        self.alpha = alpha
+        # Discrete Laplacian kernel
+        kernel = torch.tensor([[0, 1, 0],
+                                [1,-4, 1],
+                                [0, 1, 0]], dtype=torch.float32)
+        # Reshape to [1,1,3,3] for depthwise conv
+        self.register_buffer('laplacian',
+            kernel.unsqueeze(0).unsqueeze(0))
+
+    def forward(self, T_pred, T_real, lambda_flux, lambda_energy):
+        # Heat flux: (T_pred - T_real) == alpha * Laplacian(T_pred)
+        L2T = F.conv2d(T_pred, self.laplacian, padding=1)
+        flux_residual = T_pred - T_real - self.alpha * L2T
+        L_flux = (flux_residual ** 2).mean()
+        # Energy conservation
+        L_energy = (T_pred.mean() - T_real.mean()) ** 2
+        # Gradient smoothness
+        dx = (T_pred[:,:,:,1:] - T_pred[:,:,:,:-1]).abs().mean()
+        dy = (T_pred[:,:,1:,:] - T_pred[:,:,:-1,:]).abs().mean()
+        L_smooth = dx + dy
+        return (lambda_flux * L_flux +
+                lambda_energy * L_energy +
+                0.1 * L_smooth)
+\end{verbatim}
+
+\section{Spectral Loss Implementation}
+
+The spectral loss module (\texttt{losses/spectral\_loss.py}) constructs a Gaussian frequency mask and applies it to the FFT magnitude spectra:
+
+\begin{verbatim}
+class SpectralLoss(nn.Module):
+    def __init__(self, img_size=256, sigma=32.0):
+        super().__init__()
+        H = W = img_size
+        # Build Gaussian low-frequency emphasis mask
+        cy, cx = H // 2, W // 2
+        y = torch.arange(H).float() - cy
+        x = torch.arange(W).float() - cx
+        grid_y, grid_x = torch.meshgrid(y, x, indexing='ij')
+        mask = torch.exp(-(grid_y**2 + grid_x**2) / (2 * sigma**2))
+        self.register_buffer('mask',
+            mask.unsqueeze(0).unsqueeze(0))  # [1,1,H,W]
+
+    def forward(self, pred, target):
+        # 2D FFT -> shift zero-freq to center -> magnitude
+        fft_pred = torch.fft.fftshift(torch.fft.fft2(pred))
+        fft_tgt  = torch.fft.fftshift(torch.fft.fft2(target))
+        mag_pred = fft_pred.abs()
+        mag_tgt  = fft_tgt.abs()
+        # Weighted MSE in frequency domain
+        return F.mse_loss(mag_pred * self.mask,
+                          mag_tgt  * self.mask)
+\end{verbatim}
+
+\section{ODE-UNet Generator: ConvODE Function}
+
+The ConvODE dynamics function $f_\theta(t, \mathbf{z})$ that parameterises $d\mathbf{z}/dt$ in the spatial bottleneck:
+
+\begin{verbatim}
+class ODEFunc(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv2d(channels + 1, channels, 3, padding=1),
+            nn.InstanceNorm2d(channels),
+            nn.SiLU(),
+            nn.Conv2d(channels, channels, 3, padding=1),
+            nn.InstanceNorm2d(channels),
+        )
+    def forward(self, t, z):
+        # Broadcast scalar time as additional channel
+        t_broadcast = torch.ones_like(z[:, :1]) * t
+        return self.net(torch.cat([z, t_broadcast], dim=1))
+\end{verbatim}
+
+The ODE is solved using \texttt{torchdiffeq.odeint}:
+
+\begin{verbatim}
+from torchdiffeq import odeint
+z1 = odeint(self.ode_func, z0,
+            t=torch.tensor([0.0, 1.0]).to(z0.device),
+            method='dopri5', rtol=1e-3, atol=1e-3)[-1]
+\end{verbatim}
+
+\section{Gradio Inference Demo}
+
+The interactive demo (\texttt{demo.py}) loads all five domain-specific best checkpoints and provides a Gradio web interface. Users can upload any RGB image and select the domain (KAIST, Medical, CBSR, Agri-Tomato, Agri-Chilli), and the demo outputs the synthesised thermal image in real-time. The demo runs on \texttt{localhost:7860} and requires no GPU at inference time (CPU mode supported).
+
+\begin{verbatim}
+# Launch all 5 models:
+python demo.py
+# Runs at: http://localhost:7860
+\end{verbatim}

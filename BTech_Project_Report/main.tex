@@ -1,0 +1,284 @@
+\documentclass[11pt, a4paper, oneside]{Thesis}
+\usepackage{wrapfig}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[square, numbers]{natbib}
+
+\hypersetup{urlcolor=black, colorlinks=true}
+\title{\ttitle}
+
+%======================================================================|
+\thesistitle{Physics-Informed LiquidGAN for Zero-Shot Cross-Domain Thermal Image Synthesis}
+\degree{B.Tech. Computer Science and Engineering}
+\authors{Harshit Verma \\[-2mm] (Roll No: 122CS0023)}
+\supervisor{Dr. N. Srinivas Naik}
+\department{Department of CSE}
+%======================================================================|
+
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+%======================================================================|
+\begin{document}
+\makeatletter
+\renewcommand*{\NAT@nmfmt}[1]{\textsc{#1}}
+\makeatother
+
+\frontmatter
+\setstretch{1.6}
+
+\fancyhead{}
+\rhead{\thepage}
+\lhead{}
+
+\pagestyle{fancy}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\hypersetup{pdftitle={\ttitle}}
+\hypersetup{pdfsubject=\subjectname}
+\hypersetup{pdfauthor=\authornames}
+\hypersetup{pdfkeywords=\keywordnames}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+\begin{center}
+
+\vspace{0.4cm}
+{\huge \bfseries \ttitle}\\[0.4cm]
+\vspace{1.5cm}
+
+\large \textit{A report submitted in partial fulfilment of the requirements\\ for the award of the degree of \\ B.Tech Computer Science and Engineering}\\[0.3cm]
+\textit{by}\\[0.4cm]
+
+\authornames
+
+\vfill
+\graphicspath{ {./} }
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=0.3\linewidth]{klogo.png}
+\end{figure}
+
+\DEPTNAME\\
+\textsc{ \UNIVNAME}\\[1.5cm]
+\large April 2026\\[2cm]
+
+\end{center}
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	DECLARATION PAGE
+%----------------------------------------------------------------------------------------
+
+\Declaration{\addtocontents{toc}{\vspace{1em}}
+
+\noindent I, \textbf{Harshit Verma}, with Roll No: \textbf{122CS0023} hereby declare that
+the material presented in the Project Report titled \textbf{Physics-Informed LiquidGAN for Zero-Shot Cross-Domain Thermal Image Synthesis}
+represents original work carried out by me in the \textbf{Department of Computer Science and Engineering} at the \textbf{Indian Institute of Information Technology,
+Design and Manufacturing, Kurnool} during the years \textbf{2023 -- 2026}.
+
+With my signature, I certify that:
+\begin{itemize}
+	\item I have not manipulated any of the data or results.\\[-10mm]
+	\item I have not committed any plagiarism of intellectual property. I have clearly indicated and referenced the contributions of others.\\[-10mm]
+	\item I have explicitly acknowledged all collaborative research and discussions.\\[-10mm]
+	\item I have understood that any false claim will result in severe disciplinary action.\\[-10mm]
+	\item I have understood that the work may be screened for any form of academic {misconduct}.
+\end{itemize}
+
+\vspace{10mm}
+\noindent {\footnotesize{Date:\hfill Student's Signature}} \qquad
+\vspace{10mm}
+
+\noindent
+In my capacity as supervisor of the above-mentioned work, I certify that the work presented in this Report is carried out under my supervision, and is worthy of consideration for the requirements of B.Tech.\ Project work.
+
+\vspace{10mm}
+\noindent  {\footnotesize{Advisor's Name: Dr. N. Srinivas Naik \hfill Advisor's Signature}} \qquad
+
+\vfill{}}
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\addtotoc{Abstract}
+
+\abstract{\addtocontents{toc}{\vspace{1em}}
+
+Thermal imaging is a critical sensing modality in surveillance, medical diagnostics, and precision agriculture. However, the high cost of Long-Wave Infrared (LWIR) thermal cameras and the scarcity of annotated paired datasets significantly limit the deployment of data-driven models in these domains. This work proposes \textbf{PC-LiquidGAN} (Physics-Constrained LiquidGAN), an extension of the LiquidGAN framework that integrates four novel contributions to achieve high-fidelity RGB-to-thermal image synthesis under data scarcity.
+
+The proposed model employs a \textbf{Neural ODE-based UNet generator} (ODE-UNet) with spatial skip connections that preserve high-frequency detail while modelling continuous thermal diffusion dynamics. A \textbf{Liquid Neural Network (LNN) discriminator} with learnable time constants provides adaptive, multi-scale discrimination of thermal textures. Two physics-informed loss terms --- a \textbf{heat diffusion PDE loss} (enforcing $\partial T/\partial t = \alpha \nabla^2 T$) and an \textbf{FFT spectral loss} with Gaussian low-frequency emphasis --- constrain the generator to produce thermodynamically plausible outputs.
+
+The full model is trained independently on five diverse thermal datasets spanning surveillance (KAIST), biometrics (CBSR NIR face), healthcare (medical knee IR), and agriculture (tomato leaf disease, chilli pepper disease). Results demonstrate near-perfect structural fidelity on controlled domains (SSIM $= 0.9976$, PSNR $= 52.23$ dB on CBSR) and strong performance on complex surveillance scenes (SSIM $= 0.9351$ on KAIST). An extensive ablation study across all five datasets confirms the additive contribution of each proposed component.
+
+}
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+\setstretch{1.3}
+
+\acknowledgements{\addtocontents{toc}{\vspace{1em}}
+
+I would like to express my deepest gratitude to my project supervisor, \textbf{Dr. N. Srinivas Naik}, Associate Professor, Department of CSE, IIITDM Kurnool, for his invaluable guidance, constant encouragement, and insightful feedback throughout the course of this project. His expertise in deep learning and computer vision shaped the direction of this research significantly.
+
+I am grateful to the \textbf{Department of Computer Science and Engineering, IIITDM Kurnool} for providing the computational resources, including GPU workstations, that made this work feasible.
+
+I thank the creators of the public datasets used in this work: the KAIST Multispectral Pedestrian Benchmark, the CBSR NIR Face Database, and the open agricultural disease image datasets available on Kaggle.
+
+I acknowledge the developers of \textsc{torchdiffeq} (Chen et al.) for their open-source Neural ODE library, which forms the mathematical backbone of the ODE-UNet generator architecture.
+
+Finally, I thank my family and friends for their unwavering support and moral encouragement during the long training runs and late nights of debugging.
+
+}
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	LIST OF CONTENTS/FIGURES/TABLES PAGES
+%----------------------------------------------------------------------------------------
+
+\pagestyle{fancy}
+
+\lhead{\emph{Contents}}
+\tableofcontents
+
+\lhead{\emph{List of Figures}}
+\listoffigures
+
+\lhead{\emph{List of Tables}}
+\listoftables
+
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+
+\clearpage
+
+\setstretch{1.5}
+
+\lhead{\emph{Abbreviations}}
+\listofsymbols{ll}
+{
+\textbf{GAN}   & \textbf{G}enerative \textbf{A}dversarial \textbf{N}etwork \\
+\textbf{ODE}   & \textbf{O}rdinary \textbf{D}ifferential \textbf{E}quation \\
+\textbf{LNN}   & \textbf{L}iquid \textbf{N}eural \textbf{N}etwork \\
+\textbf{PINN}  & \textbf{P}hysics-\textbf{I}nformed \textbf{N}eural \textbf{N}etwork \\
+\textbf{CNN}   & \textbf{C}onvolutional \textbf{N}eural \textbf{N}etwork \\
+\textbf{PDE}   & \textbf{P}artial \textbf{D}ifferential \textbf{E}quation \\
+\textbf{FFT}   & \textbf{F}ast \textbf{F}ourier \textbf{T}ransform \\
+\textbf{SSIM}  & \textbf{S}tructural \textbf{S}imilarity \textbf{I}ndex \textbf{M}easure \\
+\textbf{PSNR}  & \textbf{P}eak \textbf{S}ignal-to-\textbf{N}oise \textbf{R}atio \\
+\textbf{LWIR}  & \textbf{L}ong-\textbf{W}ave \textbf{I}nfra\textbf{R}ed \\
+\textbf{NIR}   & \textbf{N}ear \textbf{I}nfra\textbf{R}ed \\
+\textbf{RGB}   & \textbf{R}ed \textbf{G}reen \textbf{B}lue (standard colour image) \\
+\textbf{DCGAN} & \textbf{D}eep \textbf{C}onvolutional \textbf{G}enerative \textbf{A}dversarial \textbf{N}etwork \\
+\textbf{WGAN}  & \textbf{W}asserstein \textbf{G}enerative \textbf{A}dversarial \textbf{N}etwork \\
+\textbf{PC}    & \textbf{P}hysics-\textbf{C}onstrained \\
+\textbf{NFE}   & \textbf{N}umber of \textbf{F}unction \textbf{E}valuations \\
+\textbf{L1}    & Mean Absolute Error loss \\
+\textbf{RK4}   & 4th-order \textbf{R}unge-\textbf{K}utta ODE solver \\
+}
+
+%----------------------------------------------------------------------------------------
+%	SYMBOLS
+%----------------------------------------------------------------------------------------
+
+\clearpage
+
+\lhead{\emph{Symbols}}
+
+\listofnomenclature{lll}
+{
+$T$ & Temperature field & K \\
+$\alpha$ & Thermal diffusivity constant & m$^2$/s \\
+$\nabla^2 T$ & Laplacian of temperature field & K/m$^2$ \\
+$z_0, z_1$ & Initial and evolved ODE latent state & -- \\
+$\tau$ & Learnable LNN neuron time constant & -- \\
+$f_\theta$ & ODE dynamics function parameterised by $\theta$ & -- \\
+$G$ & Generator network & -- \\
+$D$ & Discriminator network & -- \\
+$\mathcal{L}_{adv}$ & Adversarial loss & -- \\
+$\mathcal{L}_{L1}$ & L1 reconstruction loss & -- \\
+$\mathcal{L}_{flux}$ & Heat diffusion PDE residual loss & -- \\
+$\mathcal{L}_{energy}$ & Energy conservation loss & -- \\
+$\mathcal{L}_{spec}$ & FFT spectral loss & -- \\
+$\sigma$ & Gaussian mask standard deviation & pixels \\
+$\lambda$ & Loss weighting hyperparameter & -- \\
+}
+
+%----------------------------------------------------------------------------------------
+%	DEDICATION
+%----------------------------------------------------------------------------------------
+
+\setstretch{1.3}
+
+\pagestyle{empty}
+
+\dedicatory{Dedicated to my parents and to everyone who believes\\
+that physics and deep learning belong together.}
+
+\addtocontents{toc}{\vspace{2em}}
+
+%----------------------------------------------------------------------------------------
+%THESIS CONTENT - CHAPTERS
+%----------------------------------------------------------------------------------------
+\mainmatter
+\pagestyle{fancy}
+
+\input{chap_1}
+\input{chap_2}
+\input{chap_3}
+\input{chap_4}
+\input{chap_5}
+\input{chap_6}
+\input{chap_7}
+
+%----------------------------------------------------------------------------------------
+%THESIS CONTENT - APPENDICES
+%----------------------------------------------------------------------------------------
+\addtocontents{toc}{\vspace{2em}}
+\appendix
+\input{app_1}
+\input{app_2}
+\input{app_3}
+
+\addtocontents{toc}{\vspace{2em}}
+
+\backmatter
+
+%----------------------------------------------------------------------------------------
+%BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\nocite{*}
+\label{Bibliography}
+
+\lhead{\emph{Bibliography}}
+
+\bibliographystyle{IEEEtran}
+
+\bibliography{Bibliography}
+
+\end{document}

@@ -1,0 +1,63 @@
+\chapter{Conclusion and Future Work}
+\label{Chapter7}
+\lhead{Chapter 7. \emph{Conclusion and Future Work}}
+
+\section{Summary of Contributions}
+
+This project presented \textbf{PC-LiquidGAN}, a Physics-Constrained LiquidGAN for high-fidelity RGB-to-thermal image synthesis. Building upon the base LiquidGAN framework of Sarath and Nair, four novel contributions were proposed and systematically validated:
+
+\begin{enumerate}
+    \item \textbf{ODE-UNet Generator:} Replacing the flat-latent ODE bottleneck with a spatial ConvODE operating on $64 \times 16 \times 16$ feature maps, combined with four-level skip connections, yielded the single largest quality improvement: SSIM increased from $\sim$0.82 (V1) to $>$0.99 (V2) on agricultural and biometric domains. This confirms that spatial structure preservation is the critical bottleneck in thermal GAN synthesis.
+
+    \item \textbf{Adaptive ODE Solver (dopri5):} Replacing the fixed RK4 solver with adaptive Dormand-Prince improved SSIM by 3.5\% and PSNR by 2.44 dB on the Agri (Tomato) dataset. The adaptive solver allocates more computation to thermally complex regions automatically, providing a principled approach to compute-quality trade-off in ODE GANs.
+
+    \item \textbf{Heat Diffusion PDE Loss:} The physics-informed loss, enforcing $\partial T/\partial t = \alpha \nabla^2 T$ via a discrete Laplacian residual, consistently improved PSNR across all five datasets (+0.24 to +1.45 dB), confirming that physical plausibility constraints improve pixel-level accuracy even without hurting structural similarity.
+
+    \item \textbf{FFT Spectral Loss:} The frequency-domain loss with Gaussian low-frequency emphasis improved SSIM in 3 out of 5 domains, validating the physical intuition that thermal images are low-frequency dominant and that matching the spectral signature improves structural fidelity.
+\end{enumerate}
+
+\section{Quantitative Summary}
+
+The proposed PC-LiquidGAN ODE-UNet achieves state-of-the-art results across five diverse thermal domains:
+\begin{itemize}
+    \item SSIM = 0.9976 / PSNR = 52.23 dB on CBSR (biometrics)
+    \item SSIM = 0.9947 / PSNR = 50.84 dB on Agri Chilli (agriculture)
+    \item SSIM = 0.9945 / PSNR = 50.30 dB on Agri Tomato (agriculture)
+    \item SSIM = 0.9631 / PSNR = 41.22 dB on Medical (healthcare)
+    \item SSIM = 0.9351 / PSNR = 37.87 dB on KAIST (surveillance)
+\end{itemize}
+
+Zero-shot cross-domain evaluation (chilli $\to$ tomato, no fine-tuning) achieved SSIM = 0.4741, demonstrating that the physics-informed model learns domain-agnostic thermodynamic patterns rather than domain-specific textures.
+
+\section{Research Questions Answered}
+
+\begin{itemize}
+    \item \textbf{G1 (Spatial ODE):} ODE-UNet skip connections conclusively solve the spatial information loss problem of flat-latent ODE generators — validated by the SSIM jump from 0.82 to 0.99+.
+    \item \textbf{G2 (Physics in GAN):} Heat diffusion PDE constraints reliably improve PSNR, confirming physical plausibility enhances pixel accuracy.
+    \item \textbf{G3 (LNN Discriminator):} Retained from base paper, the LNN discriminator provides stable training across all five diverse domains without modification.
+    \item \textbf{G4 (Adaptive ODE):} dopri5 consistently outperforms fixed RK4 (+3.5\% SSIM, +2.44 dB PSNR on the primary benchmark).
+    \item \textbf{G5 (Cross-domain):} Physics-informed dynamics enable partial zero-shot cross-domain generalisation.
+\end{itemize}
+
+\section{Limitations}
+
+\begin{itemize}
+    \item \textbf{Fixed diffusivity $\alpha$:} The thermal diffusivity constant is fixed at 0.001 rather than being spatially-varying or material-specific. Different materials (skin, plant tissue, metal) have order-of-magnitude different $\alpha$ values.
+    \item \textbf{Supervised (paired) training:} The model requires paired RGB-thermal training data. Unsupervised cross-modal adaptation (as in CycleGAN) would be significantly more scalable.
+    \item \textbf{Resolution:} All experiments were conducted at $256 \times 256$. High-resolution thermal imaging (e.g., $1024 \times 1024$) would require additional architectural modifications.
+    \item \textbf{Computational cost:} The adaptive dopri5 solver uses $\sim$44 NFE per forward pass, making training approximately $11\times$ slower than RK4-based alternatives.
+\end{itemize}
+
+\section{Future Work}
+
+\begin{enumerate}
+    \item \textbf{Learnable Thermal Diffusivity Map:} Replace the fixed scalar $\alpha$ with a spatially-varying tensor $\alpha(\mathbf{x})$ predicted by a lightweight auxiliary network. This would enable material-aware physics constraints.
+    \item \textbf{Spatio-Temporal Video Synthesis:} Extend the ODE-UNet to the temporal domain, synthesising thermal video sequences from RGB video. The Neural ODE is naturally suited for temporal heat evolution.
+    \item \textbf{Attention-Guided LNN Discriminator:} Incorporate spatial attention into the CNN backbone before the LiquidCell, enabling the discriminator to focus on thermally critical hotspot regions.
+    \item \textbf{Unsupervised Domain Adaptation:} Extend the physics-informed framework to unpaired settings using cycle-consistency or optimal transport, eliminating the requirement for paired datasets.
+    \item \textbf{Lightweight Edge Deployment:} Quantise the ODE-UNet generator and export to ONNX for deployment on edge platforms (NVIDIA Jetson, Raspberry Pi with Coral TPU) for in-field agricultural surveillance.
+\end{enumerate}
+
+\section{Conclusion}
+
+This project demonstrates that embedding thermodynamic physical priors — specifically the heat diffusion PDE and the low-frequency spectral signature of thermal radiation — into a Neural ODE-based GAN provides principled, quantifiably superior thermal image synthesis. The ODE-UNet architecture bridges the gap between physics-informed neural networks and practical image-to-image translation, achieving near-perfect structural fidelity on multiple domains with fewer than 5,000 training pairs. The work opens new directions at the intersection of physics-informed machine learning, continuous-time generative models, and cross-domain thermal sensing.

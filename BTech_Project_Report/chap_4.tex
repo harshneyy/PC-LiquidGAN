@@ -1,0 +1,148 @@
+\chapter{System Architecture}
+\label{Chapter4}
+\lhead{Chapter 4. \emph{System Architecture}}
+
+\section{ODE-UNet Generator}
+
+\subsection{Design Rationale}
+
+The base LiquidGAN generator (V1) compresses the encoder output into a 128-dimensional flat latent vector, evolves it with a Neural ODE, then decodes back to $256 \times 256$ pixels. This bottleneck discards almost all spatial structure (edges, textures, object boundaries), leaving the decoder to reconstruct them blindly. The result is blurry, spatially imprecise thermal images despite correct global intensity.
+
+The ODE-UNet generator (V2) solves this by:
+\begin{enumerate}
+    \item Running the Neural ODE at the \emph{spatial} bottleneck of a UNet — operating on a $64 \times 16 \times 16$ feature map rather than a flat vector.
+    \item Adding four-level skip connections from encoder to decoder, routing fine spatial detail directly past the ODE bottleneck.
+\end{enumerate}
+
+\subsection{Encoder}
+
+The encoder consists of four strided convolutional blocks ($4\times4$ conv, stride 2), each followed by InstanceNorm and LeakyReLU$(0.2)$:
+
+\begin{equation}
+\mathbf{e}_1 \in \mathbb{R}^{64 \times 128 \times 128}, \quad \mathbf{e}_2 \in \mathbb{R}^{128 \times 64 \times 64}, \quad \mathbf{e}_3 \in \mathbb{R}^{256 \times 32 \times 32}, \quad \mathbf{e}_4 \in \mathbb{R}^{512 \times 16 \times 16}
+\end{equation}
+
+\subsection{Spatial ODE Bottleneck (ConvODE)}
+
+The encoder output $\mathbf{e}_4$ is first channel-compressed by a $1\times1$ convolution: $\mathbf{z}_0 = \text{Conv}_{1\times1}(\mathbf{e}_4) \in \mathbb{R}^{64 \times 16 \times 16}$. The ConvODE function $f_\theta$ parameterises $d\mathbf{z}/dt$ for 2D spatial feature maps:
+
+\begin{equation}
+    f_\theta(t, \mathbf{z}) = \text{Conv}_3(\sigma(\text{IN}(\text{Conv}_3([\mathbf{z}; \mathbf{t}]))))
+\end{equation}
+
+where $[\mathbf{z}; \mathbf{t}]$ denotes channel-wise concatenation of $\mathbf{z}$ with a broadcast scalar time embedding, IN denotes Instance Normalisation, and $\sigma$ denotes SiLU activation. The ODE is solved:
+
+\begin{equation}
+    \mathbf{z}_1 = \mathbf{z}_0 + \int_0^1 f_\theta(t, \mathbf{z})\, dt
+\end{equation}
+
+using the \textbf{dopri5} (Dormand-Prince) adaptive 4/5th-order Runge-Kutta solver with relative tolerance $10^{-3}$ and absolute tolerance $10^{-3}$. The evolved feature map is channel-expanded: $\mathbf{b} = \text{Conv}_{1\times1}(\mathbf{z}_1) \in \mathbb{R}^{512 \times 16 \times 16}$.
+
+\subsection{Decoder with Skip Connections}
+
+Four transposed convolutional blocks upsample the feature map to $256 \times 256$. At each level, the encoder feature map is concatenated (skip connection) before the transposed convolution:
+
+\begin{align}
+    \mathbf{d}_4 &= \text{Dec}_4(\text{cat}[\mathbf{b},\;\mathbf{e}_4]) \in \mathbb{R}^{256 \times 32 \times 32} \\
+    \mathbf{d}_3 &= \text{Dec}_3(\text{cat}[\mathbf{d}_4,\;\mathbf{e}_3]) \in \mathbb{R}^{128 \times 64 \times 64} \\
+    \mathbf{d}_2 &= \text{Dec}_2(\text{cat}[\mathbf{d}_3,\;\mathbf{e}_2]) \in \mathbb{R}^{64 \times 128 \times 128} \\
+    \hat{T}   &= \text{Dec}_1(\text{cat}[\mathbf{d}_2,\;\mathbf{e}_1]) \in \mathbb{R}^{1 \times 256 \times 256}
+\end{align}
+
+The final output is passed through $\tanh$ to map to $[-1, 1]$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{detailed_architecture.png}
+    \caption{Detailed ODE-UNet generator architecture showing the encoder, ConvODE bottleneck, and decoder with skip connections. Feature map dimensions are annotated at each stage.}
+    \label{fig:detailed_arch}
+\end{figure}
+
+\subsection{Parameter Count}
+
+The ODE-UNet generator has approximately 13.8M trainable parameters, compared to 7.8M for the V1 flat-latent generator. The ConvODE function $f_\theta$ accounts for approximately 450K parameters.
+
+\section{Liquid Neural Network Discriminator}
+
+\subsection{CNN Feature Extractor}
+
+The discriminator CNN backbone takes a thermal image $\mathbf{y} \in \mathbb{R}^{1 \times 256 \times 256}$ and extracts features through four strided convolutional blocks (channels: $1 \to 64 \to 128 \to 256 \to 512$), followed by adaptive average pooling to $4 \times 4$:
+
+\begin{equation}
+    \mathbf{f} = \text{Flatten}(\text{AvgPool}(\text{CNN}(\mathbf{y}))) \in \mathbb{R}^{8192}
+\end{equation}
+
+\subsection{Liquid Neural Network Cell}
+
+The LiquidCell refines the CNN features using the continuous-time neuronal dynamics of Liquid Neural Networks:
+\begin{equation}
+    \tau \frac{d\mathbf{h}}{dt} = -\mathbf{h} + \tanh(\mathbf{W}_{in}\mathbf{f} + \mathbf{W}_{rec}\mathbf{h} + \mathbf{b})
+\end{equation}
+
+where $\tau \in \mathbb{R}^{256}$ is a vector of \emph{learnable} per-neuron time constants, initialised to 1. The ODE is discretised via 6 Euler steps ($\Delta t = 1/6$):
+\begin{equation}
+    \Delta\mathbf{h} = \frac{-\mathbf{h} + \tanh(\mathbf{W}_{in}\mathbf{f} + \mathbf{W}_{rec}\mathbf{h})}{\tau + \varepsilon}, \quad \mathbf{h} \leftarrow \mathbf{h} + \Delta t \cdot \Delta\mathbf{h}
+\end{equation}
+
+\subsection{Classification Head}
+
+The final hidden state $\mathbf{h} \in \mathbb{R}^{256}$ is passed through a two-layer MLP: $\text{FC}_{256 \to 64} \to \text{LeakyReLU} \to \text{FC}_{64 \to 1} \to \text{Sigmoid}$, producing a real/fake probability score.
+
+The discriminator has approximately 4.9M trainable parameters.
+
+\section{Adversarial Training Flow}
+
+The Generator $G$ and Discriminator $D$ interact in a minimax adversarial loop. During each training iteration:
+
+\begin{enumerate}
+    \item \textbf{Generator Forward Pass:} The ODE-UNet Generator takes an RGB image $\mathbf{x}$ and produces a fake thermal image $\hat{\mathbf{y}} = G(\mathbf{x})$. The ConvODE bottleneck solves $d\mathbf{z}/dt = f_\theta(t, \mathbf{z})$ from $t=0$ to $t=1$ during this forward pass.
+    \item \textbf{Discriminator Judgement:} The LNN Discriminator receives both real thermal images $\mathbf{y}$ and the generated fake thermal images $\hat{\mathbf{y}}$. Instance noise is added to both before discrimination. The Discriminator outputs a real/fake probability via its Liquid Cell dynamics.
+    \item \textbf{Discriminator Update:} $D$ is trained to correctly classify real samples (label-smoothed to 0.9) and fake samples (label-smoothed to 0.05). Gradient clipping to norm 1.0 prevents instability from the adjoint backpropagation through the ODE.
+    \item \textbf{Generator Update (2$\times$):} $G$ is updated twice per $D$ update. The generator loss combines four terms: (a) adversarial loss $\mathcal{L}_{adv}$ to fool $D$, (b) L1 reconstruction loss for pixel accuracy, (c) heat diffusion physics loss for thermodynamic plausibility, and (d) FFT spectral loss for frequency-domain fidelity.
+\end{enumerate}
+
+During the first 10 warmup epochs, $D$ is frozen and $G$ is trained with L1 loss only, providing a stable initialisation before adversarial pressure begins.
+
+\textbf{At inference time, only the Generator is used.} The Discriminator's sole purpose is to guide the Generator during training --- once training is complete, the Discriminator is discarded and the Generator produces thermal images independently.
+
+\section{Adaptive ODE Solver: dopri5}
+
+A key contribution of this work is replacing the fixed RK4 solver of the base paper with the adaptive Dormand-Prince solver (dopri5). The dopri5 method maintains embedded 4th- and 5th-order accuracy estimates and adjusts step size automatically:
+\begin{equation}
+    h_{new} = h \cdot \min\!\left(\text{factor}_{max},\; \max\!\left(\text{factor}_{min},\; \text{safety} \cdot \left(\frac{\varepsilon_{tol}}{\varepsilon_{est}}\right)^{1/5}\right)\right)
+\end{equation}
+This means the solver uses more function evaluations (higher compute) in regions where the ODE dynamics are complex (e.g., thermally complex textures), and fewer evaluations in simpler regions. On average, the dopri5 solver uses $\sim44$ NFE per forward pass compared to exactly 4 NFE for RK4.
+
+\section{Training Pipeline}
+
+Algorithm~\ref{alg:train} summarises the complete training loop.
+
+\begin{table}[htbp]
+\centering
+\caption{Training hyperparameters for PC-LiquidGAN.}
+\label{tab:hyperparams}
+\begin{tabular}{lll}
+\toprule
+\textbf{Hyperparameter} & \textbf{Value} & \textbf{Rationale} \\
+\midrule
+Image resolution & $256 \times 256$ & Standard for image synthesis \\
+Batch size & 16 & GPU memory constraint ($\leq$ 24 GB VRAM) \\
+Epochs & 100 & Convergence observed by epoch 80+ \\
+$\text{LR}_G$ & $2 \times 10^{-4}$ & Adam default for GANs \\
+$\text{LR}_D$ & $1 \times 10^{-4}$ & Slower D prevents overpowering G \\
+$(\beta_1, \beta_2)$ & $(0.5, 0.999)$ & Standard GAN Adam betas \\
+ODE method & dopri5 & Adaptive, better quality \\
+ODE rtol / atol & $10^{-3}$ / $10^{-3}$ & Speed-accuracy trade-off \\
+LR schedule & CosineAnnealingLR & Smooth LR decay \\
+Warmup epochs & 10 & L1-only pre-training \\
+G:D update ratio & 2:1 & Generator parity \\
+Gradient clip norm & 1.0 & Adjoint stability \\
+$\lambda_{adv}$ & 1.0 & Adversarial weight \\
+$\lambda_{L1}$ & 10.0 & Strong reconstruction \\
+$\lambda_{phys}$ & 0.1 & Physics regularisation \\
+$\lambda_{spec}$ & 0.05 & Spectral regularisation \\
+$\alpha$ (thermal diffusivity) & 0.001 & Biological tissue approximation \\
+$\sigma$ (Gaussian mask) & 32 pixels & Low-frequency emphasis radius \\
+\bottomrule
+\end{tabular}
+\end{table}
