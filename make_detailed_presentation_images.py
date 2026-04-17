@@ -128,39 +128,39 @@ def create_detailed_architecture():
     for i in range(4):
         # Encoder box
         ax.add_patch(patches.Rectangle((blocks_enc_x[i], blocks_enc_y[i]), blocks_enc_w, blocks_enc_h[i], fill=True, color='skyblue', ec='black'))
-        ax.text(blocks_enc_x[i] + blocks_enc_w/2, blocks_enc_y[i] + blocks_enc_h[i]/2, f'Conv\nBlock {i+1}', ha='center', va='center', fontsize=9, rotation=90, fontweight='bold')
+        ax.text(blocks_enc_x[i] + blocks_enc_w/2, blocks_enc_y[i] + blocks_enc_h[i]/2, f'Conv\nBlock {i+1}', ha='center', va='center', fontsize=12, rotation=90, fontweight='bold', color='black')
         
         # Decoder box (align with encoder)
         ax.add_patch(patches.Rectangle((blocks_dec_x[i], blocks_dec_y[i]), blocks_enc_w, blocks_enc_h[i], fill=True, color='lightgreen', ec='black'))
-        ax.text(blocks_dec_x[i] + blocks_enc_w/2, blocks_dec_y[i] + blocks_enc_h[i]/2, f'UpConv\nBlock {i+1}', ha='center', va='center', fontsize=9, rotation=90, fontweight='bold')
+        ax.text(blocks_dec_x[i] + blocks_enc_w/2, blocks_dec_y[i] + blocks_enc_h[i]/2, f'UpConv\nBlock {i+1}', ha='center', va='center', fontsize=12, rotation=90, fontweight='bold', color='black')
         
         # Draw Skip Connections
         if i < 3: # Skip connection
             ax.annotate('', xy=(blocks_dec_x[i], blocks_dec_y[i] + blocks_enc_h[i]/2), xytext=(blocks_enc_x[i] + blocks_enc_w, blocks_enc_y[i] + blocks_enc_h[i]/2),
                         arrowprops=dict(facecolor='gray', linestyle='dashed', edgecolor='gray', shrink=0.0, width=1, headwidth=5))
-            ax.text((blocks_enc_x[i] + blocks_enc_w + blocks_dec_x[i])/2, blocks_dec_y[i] + blocks_enc_h[i]/2 + 0.02, 'Concat Skip Connection', ha='center', va='bottom', fontsize=9, color='darkred', fontweight='bold')
+            ax.text((blocks_enc_x[i] + blocks_enc_w + blocks_dec_x[i])/2, blocks_dec_y[i] + blocks_enc_h[i]/2 + 0.02, 'Concat Skip Connection', ha='center', va='bottom', fontsize=11, color='#ff6666', fontweight='bold')
             
         # Draw downsampling arrows
         if i < 3:
             ax.annotate('', xy=(blocks_enc_x[i+1], blocks_enc_y[i+1] + blocks_enc_h[i+1]/2), xytext=(blocks_enc_x[i] + blocks_enc_w/2, blocks_enc_y[i]),
                         arrowprops=dict(facecolor='red', shrink=0.0, width=1.5, headwidth=6), va='top')
-            ax.text(blocks_enc_x[i] + blocks_enc_w, blocks_enc_y[i] - 0.05, 'Downsample', fontsize=9, color='red', fontweight='bold')
+            ax.text(blocks_enc_x[i] + blocks_enc_w, blocks_enc_y[i] - 0.05, 'Downsample', fontsize=11, color='red', fontweight='bold')
             
             # Draw upsampling arrows
             ax.annotate('', xy=(blocks_dec_x[i] + blocks_enc_w/2, blocks_dec_y[i]), xytext=(blocks_dec_x[i+1], blocks_dec_y[i+1] + blocks_enc_h[i+1]/2),
                         arrowprops=dict(facecolor='green', shrink=0.0, width=1.5, headwidth=6))
-            ax.text(blocks_dec_x[i+1] - 0.04, blocks_dec_y[i] - 0.05, 'Upsample', fontsize=9, color='green', fontweight='bold')
+            ax.text(blocks_dec_x[i+1] - 0.04, blocks_dec_y[i] - 0.05, 'Upsample', fontsize=11, color='lightgreen', fontweight='bold')
             
     # Bottleneck and ConvODEFunc
-    ax.add_patch(patches.Rectangle((0.53, -0.1), 0.12, 0.15, fill=True, color='orange', ec='black'))
-    ax.text(0.53 + 0.06, -0.025, 'Spatial\nConvODEFunc\n(dopri5 adaptive)', ha='center', va='center', fontsize=10, fontweight='bold')
+    ax.add_patch(patches.Rectangle((0.50, -0.1), 0.18, 0.15, fill=True, color='orange', ec='black'))
+    ax.text(0.50 + 0.09, -0.025, 'Spatial\nConvODEFunc\n(dopri5 adaptive)', ha='center', va='center', fontsize=12, fontweight='bold', color='black')
     
     # Connect encoder to ODE
     ax.annotate('', xy=(0.55, -0.025), xytext=(blocks_enc_x[3] + blocks_enc_w/2, blocks_enc_y[3]),
                 arrowprops=dict(facecolor='black', shrink=0.0, width=2, headwidth=7))
     
     # Connect ODE to decoder
-    ax.annotate('', xy=(blocks_dec_x[3], blocks_dec_y[3] + blocks_enc_h[3]/2), xytext=(0.53 + 0.12, -0.025),
+    ax.annotate('', xy=(blocks_dec_x[3], blocks_dec_y[3] + blocks_enc_h[3]/2), xytext=(0.50 + 0.18, -0.025),
                 arrowprops=dict(facecolor='black', shrink=0.0, width=2, headwidth=7))
 
     # Inputs and Outputs
@@ -171,18 +171,18 @@ def create_detailed_architecture():
     ax.annotate('', xy=(1.28, 0.7), xytext=(blocks_dec_x[0] + blocks_enc_w, blocks_dec_y[0] + blocks_enc_h[0]/2), arrowprops=dict(facecolor='black', shrink=0.0, width=3, headwidth=10))
     
     # Discriminator / Losses
-    ax.add_patch(patches.Rectangle((1.05, -0.15), 0.22, 0.18, fill=True, color='pink', ec='black'))
-    ax.text(1.16, -0.06, 'Liquid Neural Network\n(LNN Discriminator)', ha='center', va='center', fontsize=10, fontweight='bold')
+    ax.add_patch(patches.Rectangle((1.05, -0.15), 0.26, 0.18, fill=True, color='pink', ec='black'))
+    ax.text(1.18, -0.06, 'Liquid Neural Network\n(LNN Discriminator)', ha='center', va='center', fontsize=12, fontweight='bold', color='black')
     
-    ax.annotate('Adversarial\nFeedback', xy=(1.16, 0.03), xytext=(1.28, 0.65), arrowprops=dict(facecolor='black', linestyle='dashed', shrink=0.0, width=1, headwidth=5), ha='center', va='center')
+    ax.annotate('Adversarial\nFeedback', xy=(1.18, 0.03), xytext=(1.28, 0.65), arrowprops=dict(facecolor='black', linestyle='dashed', shrink=0.0, width=1, headwidth=5), ha='center', va='center', fontsize=12)
     
     # Physics and Spectral loss indicators
-    ax.text(0.8, -0.22, 'Physics-Constrained Loss ($L_{flux}$, $L_{energy}$)\nEnforces Heat Diffusion $\partial T / \partial t = \\alpha \\nabla^2 T$', ha='center', va='center', fontsize=12, fontweight='bold', bbox=dict(boxstyle="round,pad=0.3", fc="yellow", ec="b", lw=2))
-    ax.text(0.25, -0.22, 'FFT Spectral Loss ($L_{freq}$)\nEnforces Low-Frequency Gaussian Spectrum', ha='center', va='center', fontsize=11, fontweight='bold', bbox=dict(boxstyle="round,pad=0.3", fc="cyan", ec="b", lw=2))
+    ax.text(0.8, -0.22, 'Physics-Constrained Loss ($L_{flux}$, $L_{energy}$)\nEnforces Heat Diffusion $\partial T / \partial t = \\alpha \\nabla^2 T$', ha='center', va='center', fontsize=14, fontweight='bold', color='white', bbox=dict(boxstyle="round,pad=0.3", fc="#113300", ec="lightgreen", lw=2))
+    ax.text(0.25, -0.22, 'FFT Spectral Loss ($L_{freq}$)\nEnforces Low-Frequency Gaussian Spectrum', ha='center', va='center', fontsize=14, fontweight='bold', color='white', bbox=dict(boxstyle="round,pad=0.3", fc="#001133", ec="cyan", lw=2))
 
     ax.set_ylim(-0.35, 1.0)
     ax.set_xlim(-0.1, 1.4)
-    plt.title('Detailed PC-LiquidGAN (ODE-UNet) Architecture', fontsize=18, fontweight='bold', y=0.95, color='white')
+    plt.title('Detailed PC-LiquidGAN (ODE-UNet) Architecture', fontsize=22, fontweight='bold', y=0.95, color='black')
     plt.tight_layout()
     plt.savefig('detailed_architecture.png', dpi=300, bbox_inches='tight', transparent=True)
     plt.close()
