@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 import os
 
-plt.style.use('dark_background')
+# plt.style.use('dark_background')
 
 def create_ablation_graph():
     models = ['WGAN-GP', 'DCGAN', 'LiquidGAN\n(Base)', 'Physics\nOnly', '+Spectral', 'ODE-UNet\n(Ours)']
@@ -60,7 +60,7 @@ def create_all_models_graph():
         ax1.text(bar.get_x() + bar.get_width()/2, yval + 0.02, f'{yval:.4f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold')
     for bar in bars2:
         yval = bar.get_height()
-        ax2.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval:.2f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold', color='white')
+        ax2.text(bar.get_x() + bar.get_width()/2, yval + 1, f'{yval:.2f}', ha='center', va='bottom', fontsize=10, rotation=90, fontweight='bold', color='black')
 
     plt.savefig('results_all_models.png', dpi=300, bbox_inches='tight', transparent=True)
     plt.close()
