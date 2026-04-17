@@ -61,6 +61,27 @@ Agri (Tomato) & 24.83 & \textbf{25.07} & 24.76          & \textbf{50.30} \\
 
 \section{Analysis per Dataset}
 
+To enhance readability and provide a comprehensive comparison, Table~\ref{tab:domain_analysis} summarizes the distinct impact of the Physics and Spectral constraints on each domain, correlated with their unique scene physics.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of domain-specific qualitative and quantitative impacts of the loss constraints.}
+\label{tab:domain_analysis}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{p{2.5cm}p{3cm}p{3cm}p{4cm}}
+\toprule
+\textbf{Dataset Target} & \textbf{Physics Constraint} & \textbf{Spectral Constraint} & \textbf{Domain Characteristics} \\
+\midrule
+\textbf{KAIST (Surveillance)} & Improved PSNR but decreased SSIM & Recovers SSIM moderately & Extreme scene variability; complex daylight/night environments \\
+\textbf{Medical (Knee IR)} & Strongest positive benefit (+1.4\% SSIM) & Negative structural effect & Spatially smooth temperature patterns; low-frequency dominated \\
+\textbf{CBSR (Face NIR)} & Monotonic positive improvement & Monotonic positive improvement & Well-defined, natural biological smooth gradients \\
+\textbf{Agri -- Chilli} & Positive (+1.0\% SSIM) & Negative effect & Structural heat diffusion with localised high-frequency anomalies \\
+\textbf{Agri -- Tomato} & Negative effect (data scarcity) & Positive (+0.7\% SSIM above baseline) & Fine-grained disease patches; dataset heavily constrained \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
 \subsection{KAIST (Surveillance)}
 
 On KAIST, the baseline achieves a surprisingly high SSIM of 0.9367. Adding physics loss alone slightly decreases SSIM (0.9117) but improves PSNR (+1.45 dB), suggesting it enforces pixel-level physical accuracy at some structural cost. Adding the spectral loss partially recovers SSIM (0.9267) while retaining the PSNR gain (+1.66 dB total). The full ODE-UNet model (0.9351) achieves the best balance of SSIM and PSNR.

@@ -16,11 +16,13 @@ The ODE-UNet generator (V2) solves this by:
 
 \subsection{Encoder}
 
-The encoder consists of four strided convolutional blocks ($4\times4$ conv, stride 2), each followed by InstanceNorm and LeakyReLU$(0.2)$:
+The encoder employs a progressive downsampling strategy using four strided convolutional blocks. Each block consists of a $4\times4$ convolution with a stride of 2, doubling the channel capacity while halving the spatial dimensions to rapidly build a hierarchical thermal representation. Instance Normalisation (IN) is strictly adopted over Batch Normalisation to preserve instance-specific contrast dynamics, which are critical for individual thermal image fidelity. This is followed by a LeakyReLU activation with a negative slope of $0.2$ to mitigate vanishing gradients in the deeper layers.
 
 \begin{equation}
 \mathbf{e}_1 \in \mathbb{R}^{64 \times 128 \times 128}, \quad \mathbf{e}_2 \in \mathbb{R}^{128 \times 64 \times 64}, \quad \mathbf{e}_3 \in \mathbb{R}^{256 \times 32 \times 32}, \quad \mathbf{e}_4 \in \mathbb{R}^{512 \times 16 \times 16}
 \end{equation}
+
+By maintaining spatial dimensions at the $16 \times 16$ bottleneck rather than collapsing to a 1D vector (as done in V1), the encoder preserves the critical topological structure required by the subsequent ConvODE block.
 
 \subsection{Spatial ODE Bottleneck (ConvODE)}
 
@@ -115,7 +117,37 @@ This means the solver uses more function evaluations (higher compute) in regions
 
 \section{Training Pipeline}
 
-Algorithm~\ref{alg:train} summarises the complete training loop.
+The complete training process is driven by an alternating minimax optimisation scheme balancing generator and discriminator updates, as detailed in Algorithm~\ref{alg:train}. To ensure the generator establishes a stable structural foundation before adversarial dynamics are introduced, the pipeline begins with a 10-epoch warmup phase focusing strictly on the L1 reconstruction loss. 
+
+Following the warmup, full adversarial training commences. To prevent the discriminator from overpowering the generator early on, we enforce a 2:1 update ratio (the generator is updated twice for every discriminator update). Gradient explosion during adjoint backpropagation through the dopri5 Neural ODE solver is a known instability; we mitigate this by clipping all gradients to a maximum norm of 1.0. The generator's final composite objective merges adversarial feedback, pixel-wise L1 constraints, heat diffusion physics gradients, and Fourier spectral matching.
+
+\begin{algorithm}[H]
+\caption{PC-LiquidGAN Adversarial Training Loop}
+\label{alg:train}
+\begin{algorithmic}[1]
+\Require Training dataset $\mathcal{D}$, Generator $G$, Discriminator $D$, 10 Epoch Warmup
+\For{$epoch = 1 \textbf{ to } N$}
+    \For{batch $(\mathbf{x}, \mathbf{y}) \in \mathcal{D}$}
+        \State $\hat{\mathbf{y}} = G(\mathbf{x})$ \Comment{Forward explicitly runs Neural ODE solver}
+        \If{$epoch > 10$}
+            \State \textbf{Update Discriminator $D$:}
+            \State $\mathcal{L}_D = \text{BCELoss}(D(\mathbf{y}), 0.9) + \text{BCELoss}(D(\hat{\mathbf{y}}.\text{detach}()), 0.05)$
+            \State $\theta_D \leftarrow \text{Adam}(\nabla \mathcal{L}_D)$
+        \EndIf
+        
+        \State \textbf{Update Generator $G$ (twice per $D$ update):}
+        \State $\mathcal{L}_{adv} = \text{BCELoss}(D(\hat{\mathbf{y}}), 0.9)$ \Comment{Trick $D$ into believing fake is real}
+        \State $\mathcal{L}_{L1} = ||\hat{\mathbf{y}} - \mathbf{y}||_1$
+        \State $\mathcal{L}_{phys} = \lambda_{flux}\mathcal{L}_{flux}(\hat{\mathbf{y}}, \mathbf{y}) + \lambda_{en}\mathcal{L}_{en}(\hat{\mathbf{y}}, \mathbf{y})$
+        \State $\mathcal{L}_{spec} = \text{FFTMagnitude}(\hat{\mathbf{y}}, \mathbf{y})$
+        \State $\mathcal{L}_G = \lambda_1\mathcal{L}_{adv} + \lambda_2\mathcal{L}_{L1} + \lambda_3\mathcal{L}_{phys} + \lambda_4\mathcal{L}_{spec}$
+        
+        \State Clip gradients of $G$ to norm 1.0
+        \State $\theta_G \leftarrow \text{Adam}(\nabla \mathcal{L}_G)$
+    \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 
 \begin{table}[htbp]
 \centering
