@@ -171,15 +171,7 @@ LiquidGAN (Baseline) & 0.9367 & 0.9296 & 0.8722 & 0.8537 & 0.8222 \\
 \end{tabular}
 \end{table}
 
-\section{Zero-Shot Cross-Domain Evaluation}
-
-To evaluate generalisation, the model trained exclusively on the Agri (Chilli) dataset was evaluated on the unseen Agri (Tomato) dataset without any fine-tuning:
-\begin{itemize}
-    \item \textbf{SSIM:} 0.4741
-    \item \textbf{PSNR:} 12.59 dB
-\end{itemize}
-
-Achieving SSIM $\approx 0.47$ without a single tomato-domain training sample demonstrates that the Neural ODE learned domain-agnostic thermodynamic diffusion patterns — not merely domain-specific texture mappings. A purely memorisation-based model would score near zero on an unseen domain.
+\section{Training Convergence}
 
 \begin{figure}[htbp]
     \centering
@@ -194,3 +186,13 @@ Achieving SSIM $\approx 0.47$ without a single tomato-domain training sample dem
     \caption{Training PSNR convergence curves for all five datasets across 100 epochs. CBSR and agricultural datasets achieve $>50$ dB PSNR, while the more complex KAIST surveillance domain plateaus around 37 dB.}
     \label{fig:convergence_psnr}
 \end{figure}
+
+\section{Zero-Shot Cross-Domain Evaluation}
+
+To evaluate generalisation, the model trained exclusively on the Agri (Chilli) dataset was evaluated on the unseen Agri (Tomato) dataset without any fine-tuning:
+\begin{itemize}
+    \item \textbf{SSIM:} 0.4741
+    \item \textbf{PSNR:} 12.59 dB
+\end{itemize}
+
+Achieving SSIM $\approx 0.47$ without a single tomato-domain training sample demonstrates that the Neural ODE learned domain-agnostic thermodynamic diffusion patterns — not merely domain-specific texture mappings. A purely memorisation-based model would score near zero on an unseen domain.
